@@ -3,7 +3,7 @@ from sqlalchemy import text
 
 from app.core.config import settings
 from app.api.api import api_router
-from app.database.database import Base, engine
+from app.db.database import Base, engine
 from app.models.user import User
 
 app = FastAPI(title=settings.APP_NAME)
