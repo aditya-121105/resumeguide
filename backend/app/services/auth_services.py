@@ -1,7 +1,11 @@
 from sqlalchemy.orm import Session
-from app.core.security import hash_password
 from app.models.user import User
-from app.schemas.user import UserCreate
+from app.schemas.user import UserCreate, UserLogin
+from app.auth.security import (
+    hash_password,
+    verify_password
+)
+from app.auth.jwt import create_access_token
 
 
 def register_user(
@@ -11,6 +15,7 @@ def register_user(
 
     db_user = User(
         email=user.email,
+        full_name=user.full_name,
         username=user.username,
         hashed_password=hash_password(user.password)
     )
@@ -22,3 +27,32 @@ def register_user(
     db.refresh(db_user)
 
     return db_user
+
+def login_user(
+    user: UserLogin,
+    db: Session
+):
+
+    db_user = db.query(User).filter(
+        User.username == user.username
+    ).first()
+
+    if not db_user:
+        return None
+
+    if not verify_password(
+        user.password,
+        db_user.hashed_password
+    ):
+        return None
+
+    access_token = create_access_token(
+        data={
+            "sub": db_user.username
+        }
+    )
+
+    return {
+        "access_token": access_token,
+        "token_type": "bearer"
+    }

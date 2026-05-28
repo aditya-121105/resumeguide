@@ -10,6 +10,9 @@ class Settings(BaseSettings):
     DEBUG: bool
     API_V1_STR: str
     DATABASE_URL: str
+    SECRET_KEY: str
+    ALGORITHM: str
+    ACCESS_TOKEN_EXPIRE_MINUTES: int
 
     class Config:
         env_file = BASE_DIR / ".env"
