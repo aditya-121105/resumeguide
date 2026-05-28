@@ -29,19 +29,20 @@ def register_user(
     return db_user
 
 def login_user(
-    user: UserLogin,
+    username: str,
+    password: str,
     db: Session
 ):
 
     db_user = db.query(User).filter(
-        User.username == user.username
+        User.username == username
     ).first()
 
     if not db_user:
         return None
 
     if not verify_password(
-        user.password,
+        password,
         db_user.hashed_password
     ):
         return None
