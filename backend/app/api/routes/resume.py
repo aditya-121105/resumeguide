@@ -13,9 +13,15 @@ from sqlalchemy.orm import Session
 
 from app.db.dependencies import get_db
 from app.auth.dependencies import get_current_user
-
+from app.services.pdf_services import extract_text_from_pdf
 from app.models.user import User
 from app.models.resume import Resume
+from app.services.resume_service import (
+    upload_resume_service
+)
+from app.services.resume_service import (
+    get_user_resumes_service
+)
 
 
 router = APIRouter(
@@ -25,47 +31,38 @@ router = APIRouter(
 
 @router.post("/upload")
 def upload_resume(
+
     file: UploadFile = File(...),
+
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user)
+
+    current_user: User = Depends(
+        get_current_user
+    )
 ):
 
-    if file.content_type != "application/pdf":
+    return upload_resume_service(
 
-        raise HTTPException(
-            status_code=400,
-            detail="Only PDF files allowed"
-        )
+        file=file,
 
-    upload_dir = "uploads/resumes"
+        db=db,
 
-    os.makedirs(
-        upload_dir,
-        exist_ok=True
+        current_user=current_user
     )
 
-    file_path = f"{upload_dir}/{file.filename}"
+@router.get("/my-resumes")
+def get_my_resumes(
 
-    with open(file_path, "wb") as buffer:
+    db: Session = Depends(get_db),
 
-        shutil.copyfileobj(
-            file.file,
-            buffer
-        )
-
-    resume = Resume(
-        file_name=file.filename,
-        file_path=file_path,
-        owner_id=current_user.id
+    current_user: User = Depends(
+        get_current_user
     )
+):
 
-    db.add(resume)
+    return get_user_resumes_service(
 
-    db.commit()
+        db=db,
 
-    db.refresh(resume)
-
-    return {
-        "message": "Resume uploaded successfully",
-        "file_name": resume.file_name
-    }
+        current_user=current_user
+    )

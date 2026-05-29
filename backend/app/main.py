@@ -6,7 +6,7 @@ from app.api.api import api_router
 from app.db.database import Base, engine
 from app.models.user import User
 from app.models.resume import Resume
-
+from app.models.analysis import Analysis
 app = FastAPI(title=settings.APP_NAME)
 Base.metadata.create_all(bind=engine)
 app.include_router(

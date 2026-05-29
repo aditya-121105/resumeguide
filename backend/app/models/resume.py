@@ -23,6 +23,8 @@ class Resume(Base):
 
     file_path = Column(String, nullable=False)
 
+    resume_text = Column(String)
+
     uploaded_at = Column(
         DateTime,
         default=datetime.utcnow
@@ -36,4 +38,8 @@ class Resume(Base):
     owner = relationship(
         "User",
         back_populates="resumes"
+    )
+    analyses = relationship(
+        "Analysis",
+        back_populates="resume"
     )
