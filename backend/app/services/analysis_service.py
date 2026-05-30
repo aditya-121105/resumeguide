@@ -2,6 +2,9 @@ from fastapi import HTTPException
 from app.analysis.certificate_analyzer import (
     extract_certifications
 )
+from app.analysis.role_recommender import (
+    recommend_roles
+)
 from app.analysis.roadmap_generator import (
     generate_roadmap
 )
@@ -55,6 +58,17 @@ def analyze_resume_skills_service(
 
         job_description
     )
+    recommended_roles = (
+        recommend_roles(
+
+            analysis_result[
+                "resume_skills"
+            ]
+        )
+    )
+    analysis_result[
+        "recommended_roles"
+    ] = recommended_roles
     detected_certifications = (
         extract_certifications(
             resume.resume_text
