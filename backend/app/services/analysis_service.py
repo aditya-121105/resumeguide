@@ -2,12 +2,18 @@ from fastapi import HTTPException
 from app.analysis.certificate_analyzer import (
     extract_certifications
 )
+from app.analysis.roadmap_generator import (
+    generate_roadmap
+)
 from sqlalchemy.orm import Session
 from app.analysis.recommendation_engine import (
     generate_recommendations
 )
 from app.analysis.role_detector import (
     detect_role
+)
+from app.analysis.gap_prioritizer import (
+    prioritize_skill_gaps
 )
 from app.models.resume import Resume
 from app.models.user import User
@@ -66,6 +72,26 @@ def analyze_resume_skills_service(
             target_role
         )
     )
+    roadmap = generate_roadmap(
+
+        target_role,
+
+        analysis_result[
+            "missing_skills"
+        ]
+    )
+    skill_gaps = prioritize_skill_gaps(
+
+        analysis_result[
+            "missing_skills"
+        ]
+    )
+    analysis_result[
+        "skill_gaps"
+    ] = skill_gaps
+    analysis_result[
+        "career_roadmap"
+    ] = roadmap
     analysis_result.update(
         recommendations
     )
