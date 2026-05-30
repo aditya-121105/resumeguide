@@ -14,6 +14,9 @@ from app.auth.dependencies import (
 
 
 )
+from app.services.dashboard_service import (
+    get_dashboard_data
+)
 from app.models.user import User
 from app.models.resume import Resume
 from app.analysis.skill_analyzer import (
@@ -71,7 +74,7 @@ def get_analysis_history(
 
         current_user=current_user
     )
-@router.get("/{analysis_id}")
+@router.get("/details/{analysis_id}")
 def get_analysis_detail(
 
     analysis_id: int,
@@ -90,4 +93,23 @@ def get_analysis_detail(
         db=db,
 
         current_user=current_user
+    )
+
+@router.get("/dashboard")
+def dashboard(
+
+    db: Session = Depends(
+        get_db
+    ),
+
+    current_user: User = Depends(
+        get_current_user
+    )
+):
+
+    return get_dashboard_data(
+
+        db,
+
+        current_user.id
     )
