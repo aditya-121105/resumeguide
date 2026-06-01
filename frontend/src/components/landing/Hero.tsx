@@ -3,10 +3,10 @@ import { Badge } from "@/components/ui/badge";
 
 export default function Hero() {
   return (
-    <section className="bg-slate-50">
-      <div className="mx-auto max-w-7xl px-6 py-24">
+    <section className="bg-gradient-to-b from-slate-50 to-blue-50">
+      <div className="mx-auto flex min-h-[calc(100vh-80px)] max-w-7xl items-center px-6">
 
-        <div className="grid gap-16 lg:grid-cols-2 lg:items-center">
+        <div className="grid w-full gap-12 lg:grid-cols-2 lg:items-center">
 
           {/* Left Side */}
           <div>
@@ -18,7 +18,7 @@ export default function Hero() {
               AI-Powered Resume Analysis
             </Badge>
 
-            <h1 className="text-4xl font-bold leading-tight tracking-tight text-slate-900 lg:text-5xl xl:text-6xl">
+            <h1 className="max-w-xl text-4xl font-bold leading-tight tracking-tight text-slate-900 lg:text-5xl">
               Land More Interviews
               <br />
               With
@@ -36,136 +36,159 @@ export default function Hero() {
             </p>
 
             <div className="mt-8 flex flex-wrap gap-4">
+
               <Button size="lg">
                 Start Free Analysis
               </Button>
 
               <Button
-                variant="outline"
                 size="lg"
+                variant="outline"
               >
                 View Demo
               </Button>
+
             </div>
 
-            <div className="mt-10 flex flex-wrap gap-6 text-sm text-slate-600">
+            <div className="mt-8 flex flex-wrap gap-6 text-sm text-slate-500">
 
-              <div className="flex items-center gap-2">
-                ✓ Instant Results
-              </div>
+              <span>✓ Instant Results</span>
 
-              <div className="flex items-center gap-2">
-                ✓ Career Roadmaps
-              </div>
+              <span>✓ Career Roadmaps</span>
 
-              <div className="flex items-center gap-2">
-                ✓ Skill Gap Analysis
-              </div>
+              <span>✓ Skill Gap Analysis</span>
 
             </div>
 
           </div>
 
           {/* Right Side */}
-          <div className="relative">
 
-            <div className="rotate-0 lg:-rotate-3">
+          <div className="flex justify-center lg:justify-end">
 
-              <div className="overflow-hidden rounded-3xl border bg-white shadow-2xl">
+            <div className="w-full max-w-lg overflow-hidden rounded-3xl border bg-white shadow-xl">
 
-                {/* Browser Header */}
-                <div className="flex items-center gap-2 border-b px-6 py-4">
+              {/* Header */}
 
-                  <div className="h-3 w-3 rounded-full bg-red-400" />
+              <div className="flex items-center gap-2 border-b px-5 py-4">
 
-                  <div className="h-3 w-3 rounded-full bg-yellow-400" />
+                <div className="h-3 w-3 rounded-full bg-red-400" />
 
-                  <div className="h-3 w-3 rounded-full bg-green-400" />
+                <div className="h-3 w-3 rounded-full bg-yellow-400" />
 
-                  <span className="ml-4 text-sm font-medium text-slate-500">
-                    Resume Analysis
-                  </span>
+                <div className="h-3 w-3 rounded-full bg-green-400" />
+
+                <span className="ml-3 text-sm font-medium text-slate-500">
+                  Resume Analysis
+                </span>
+
+              </div>
+
+              <div className="space-y-6 p-6">
+
+                {/* Score */}
+
+                <div>
+
+                  <div className="flex items-end justify-between">
+
+                    <div>
+
+                      <p className="text-sm text-slate-500">
+                        Match Score
+                      </p>
+
+                      <h2 className="text-4xl font-bold text-blue-600">
+                        82%
+                      </h2>
+
+                    </div>
+
+                    <div className="rounded-lg bg-green-100 px-3 py-2 text-sm font-medium text-green-700">
+                      Great Match
+                    </div>
+
+                  </div>
+
+                  <div className="mt-3 h-2 rounded-full bg-slate-200">
+
+                    <div className="h-2 w-[82%] rounded-full bg-blue-600" />
+
+                  </div>
 
                 </div>
 
-                <div className="space-y-8 p-8">
+                {/* Role */}
 
-                  {/* Match Score */}
-                  <div>
+                <div className="rounded-xl border p-4">
 
-                    <p className="text-sm text-slate-500">
-                      Match Score
+                  <p className="text-sm text-slate-500">
+                    Target Role
+                  </p>
+
+                  <h3 className="mt-1 text-lg font-semibold">
+                    Backend Engineer
+                  </h3>
+
+                </div>
+
+                {/* Skills */}
+
+                <div className="grid grid-cols-2 gap-4">
+
+                  <div className="rounded-xl border p-4">
+
+                    <p className="mb-3 text-sm text-slate-500">
+                      Matched Skills
                     </p>
 
-                    <h2 className="mt-2 text-5xl font-bold text-blue-600">
-                      82%
-                    </h2>
+                    <div className="space-y-2 text-sm">
 
-                    <div className="mt-4 h-3 rounded-full bg-slate-200">
-                      <div className="h-3 w-[82%] rounded-full bg-blue-600" />
+                      <div>✓ Python</div>
+
+                      <div>✓ AWS</div>
+
+                      <div>✓ SQL</div>
+
                     </div>
 
                   </div>
 
-                  {/* Role */}
-                  <div>
+                  <div className="rounded-xl border p-4">
 
-                    <p className="text-sm text-slate-500">
-                      Target Role
-                    </p>
-
-                    <p className="mt-1 text-xl font-semibold">
-                      Backend Engineer
-                    </p>
-
-                  </div>
-
-                  {/* Missing Skills */}
-                  <div>
-
-                    <p className="text-sm text-slate-500">
+                    <p className="mb-3 text-sm text-slate-500">
                       Missing Skills
                     </p>
 
-                    <div className="mt-3 flex flex-wrap gap-2">
+                    <div className="space-y-2 text-sm">
 
-                      <Badge variant="secondary">
-                        Docker
-                      </Badge>
+                      <div>• Docker</div>
 
-                      <Badge variant="secondary">
-                        Kubernetes
-                      </Badge>
+                      <div>• Kubernetes</div>
+
+                      <div>• FastAPI</div>
 
                     </div>
 
                   </div>
 
-                  {/* Roadmap */}
-                  <div>
+                </div>
 
-                    <p className="text-sm text-slate-500">
-                      Career Roadmap
-                    </p>
+                {/* Roadmap */}
 
-                    <div className="mt-4 space-y-3">
+                <div className="rounded-xl border p-4">
 
-                      <div className="flex items-center gap-3">
-                        <div className="h-2 w-2 rounded-full bg-green-500" />
-                        Learn Docker Fundamentals
-                      </div>
+                  <p className="mb-3 text-sm text-slate-500">
+                    Career Roadmap
+                  </p>
 
-                      <div className="flex items-center gap-3">
-                        <div className="h-2 w-2 rounded-full bg-green-500" />
-                        Build Containerized Project
-                      </div>
+                  <div className="space-y-2 text-sm">
 
-                      <div className="flex items-center gap-3">
-                        <div className="h-2 w-2 rounded-full bg-green-500" />
-                        Deploy on AWS
-                      </div>
+                    <div>1. Learn Docker Fundamentals</div>
 
-                    </div>
+                    <div>2. Build Containerized Project</div>
+
+                    <div>3. Deploy on AWS</div>
 
                   </div>
 

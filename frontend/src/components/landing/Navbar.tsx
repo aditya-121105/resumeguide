@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 
 export default function Navbar() {
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-white/80 backdrop-blur">
+    <header className="sticky top-0 z-50 h-20 w-full border-b bg-white/80 backdrop-blur">
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
 
         {/* Logo */}
