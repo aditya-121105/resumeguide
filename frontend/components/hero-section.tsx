@@ -2,12 +2,16 @@
 
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Zap } from 'lucide-react';
+import { useAuthModal } from '@/contexts/auth-modal-context';
 
 export function HeroSection() {
+  const { openLogin } = useAuthModal();
   return (
-    <section className="relative w-full overflow-hidden bg-gradient-to-b from-background to-background/50">
-      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <div className="grid gap-8 lg:grid-cols-2 lg:gap-6 lg:py-12">
+    <section className="relative w-full overflow-hidden bg-gradient-to-br from-white via-blue-50/40 to-blue-100/60">
+      <div className="absolute top-0 right-0 h-[500px] w-[500px] rounded-full bg-blue-200/30 blur-3xl"></div>
+      <div className="absolute bottom-0 left-1/3 h-[300px] w-[300px] rounded-full bg-blue-100/20 blur-3xl"></div>
+      <div className="mx-auto max-w-7xl px-4 py-0 sm:px-6 lg:px-8">
+        <div className="grid gap-8 lg:grid-cols-[1fr_1.2fr] lg:gap-10 lg:py-12">
           {/* Left Side - Content */}
           <div className="flex flex-col justify-center space-y-6">
             <div className="space-y-3">
@@ -16,46 +20,48 @@ export function HeroSection() {
                 <span className="text-xs font-medium text-foreground/70">AI-Powered Career Intelligence</span>
               </div>
               <h1 className="text-5xl font-bold leading-tight text-foreground sm:text-6xl lg:text-5xl">
-                Your Resume, <span className="text-primary">Perfected</span>
+                Transform Your Resume Into a{" "}
+                <span className="text-primary">Career Strategy</span>
               </h1>
             </div>
 
             <p className="text-lg text-foreground/70">
-              Get instant ATS analysis, identify skill gaps, discover suitable roles, and receive personalized career roadmaps powered by advanced AI.
+              Analyze your resume, uncover skill gaps, discover career opportunities,
+              and receive AI-powered guidance tailored to your professional goals.
             </p>
 
             <div className="flex flex-col gap-3 sm:flex-row">
-              <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90">
+              <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90" onClick={openLogin}>
                 Start Free Analysis
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
-              <Button size="lg" variant="outline" className="border-border text-foreground">
-                Watch Demo
-              </Button>
+
             </div>
 
             <div className="flex gap-8 pt-4 text-sm">
               <div>
-                <div className="font-semibold text-foreground">10,000+</div>
-                <div className="text-foreground/60">Resumes Analyzed</div>
+                <div className="font-semibold text-foreground">ATS Analysis</div>
+                <div className="text-foreground/60">Resume Optimization</div>
               </div>
+
               <div>
-                <div className="font-semibold text-foreground">4.8/5</div>
-                <div className="text-foreground/60">User Rating</div>
+                <div className="font-semibold text-foreground">Skill Gap Detection</div>
+                <div className="text-foreground/60">Learning Priorities</div>
               </div>
+
               <div>
-                <div className="font-semibold text-foreground">95%</div>
-                <div className="text-foreground/60">Success Rate</div>
+                <div className="font-semibold text-foreground">Career Roadmaps</div>
+                <div className="text-foreground/60">Growth Planning</div>
               </div>
             </div>
           </div>
 
           {/* Right Side - Dashboard Preview */}
-          <div className="relative flex items-center justify-center" style={{ perspective: '1200px' }}>
+            <div className="relative flex items-center justify-center lg:pr-12" style={{ perspective: '1200px' }}>
             <div 
               className="relative overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-2xl transition-all duration-700 hover:shadow-3xl w-full"
               style={{
-                transform: 'perspective(1200px) rotateY(-2deg) rotateX(1deg)',
+                animation: 'float 6s ease-in-out infinite',
                 transformStyle: 'preserve-3d',
               }}
             >
@@ -138,7 +144,7 @@ export function HeroSection() {
             </div>
 
             {/* Decorative gradient orb */}
-            <div className="absolute -top-40 -right-40 h-96 w-96 rounded-full bg-primary/5 blur-3xl"></div>
+            <div className="absolute -top-20 -right-20 h-[450px] w-[450px] rounded-full bg-primary/10 blur-3xl"></div>
           </div>
         </div>
       </div>

@@ -15,12 +15,12 @@ export function Navbar() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <div className="flex items-center gap-2">
+          <Link href="/" className="flex items-center gap-2"><div className="flex items-center gap-2">
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
               <span className="text-sm font-bold text-primary-foreground">RG</span>
             </div>
             <span className="text-xl font-bold text-foreground">ResumeGuide</span>
-          </div>
+          </div></Link>
 
           {/* Desktop Menu */}
           <div className="hidden flex-1 items-center justify-center gap-8 md:flex">
@@ -30,9 +30,7 @@ export function Navbar() {
             <a href="#how-it-works" className="text-sm font-medium text-foreground/70 transition hover:text-foreground">
               How It Works
             </a>
-            <a href="#pricing" className="text-sm font-medium text-foreground/70 transition hover:text-foreground">
-              Pricing
-            </a>
+
           </div>
 
           {/* CTA Buttons */}
@@ -40,7 +38,11 @@ export function Navbar() {
             <Button variant="ghost" size="sm" onClick={openLogin}>
               Login
             </Button>
-            <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90">
+            <Button
+                  size="sm"
+                  className="bg-primary text-primary-foreground hover:bg-primary/90"
+                  onClick={openLogin}
+                  >
               Start Free Analysis
             </Button>
           </div>
@@ -69,9 +71,7 @@ export function Navbar() {
               <a href="#how-it-works" className="text-sm font-medium text-foreground/70">
                 How It Works
               </a>
-              <a href="#pricing" className="text-sm font-medium text-foreground/70">
-                Pricing
-              </a>
+
               <div className="flex flex-col gap-2 pt-2">
                 <Button 
                   variant="ghost" 
@@ -84,7 +84,14 @@ export function Navbar() {
                 >
                   Login
                 </Button>
-                <Button size="sm" className="w-full bg-primary text-primary-foreground hover:bg-primary/90">
+                <Button
+                      size="sm"
+                      className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
+                      onClick={() => {
+                      openLogin();
+                      setIsOpen(false);
+                      }}
+                   >
                   Start Free Analysis
                 </Button>
               </div>

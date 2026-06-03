@@ -203,3 +203,20 @@
     animation: subtle3D 4s ease-in-out infinite;
   }
 }
+html {
+  scroll-behavior: smooth;
+}
+@keyframes float {
+  0% {
+    transform: perspective(1200px) rotateY(-10deg) rotateX(5deg)
+      translateY(0px);
+  }
+  50% {
+    transform: perspective(1200px) rotateY(-10deg) rotateX(5deg)
+      translateY(-10px);
+  }
+  100% {
+    transform: perspective(1200px) rotateY(-10deg) rotateX(5deg)
+      translateY(0px);
+  }
+}

@@ -6,17 +6,32 @@ import { HowItWorks } from '@/components/how-it-works';
 import { DashboardShowcase } from '@/components/dashboard-showcase';
 import { CtaSection } from '@/components/cta-section';
 import { Footer } from '@/components/footer';
+import { ScrollReveal } from "@/components/scroll-reveal";
 
 export default function Page() {
   return (
     <main className="w-full">
       <Navbar />
       <HeroSection />
-      <TrustSection />
-      <FeaturesSection />
-      <HowItWorks />
-      <DashboardShowcase />
-      <CtaSection />
+<ScrollReveal>
+  <TrustSection />
+</ScrollReveal>
+
+<ScrollReveal>
+  <FeaturesSection />
+</ScrollReveal>
+
+<ScrollReveal>
+  <HowItWorks />
+</ScrollReveal>
+
+<ScrollReveal>
+  <DashboardShowcase />
+</ScrollReveal>
+
+<ScrollReveal>
+  <CtaSection />
+</ScrollReveal>
       <Footer />
     </main>
   );

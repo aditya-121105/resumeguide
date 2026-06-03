@@ -2,9 +2,12 @@
 
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
+import { useAuthModal } from '@/contexts/auth-modal-context'
 
 export function CtaSection() {
-  return (
+  const { openLogin } = useAuthModal()
+    return (
+
     <section className="relative w-full overflow-hidden bg-gradient-to-b from-background to-background py-20 sm:py-24 lg:py-32">
       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
         <div className="relative z-10 text-center">
@@ -16,25 +19,22 @@ export function CtaSection() {
           </p>
 
           <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:justify-center">
-            <Button
-              size="lg"
-              className="bg-primary text-primary-foreground hover:bg-primary/90 font-semibold"
-            >
-              Start Free Analysis
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="border-border text-foreground font-semibold"
-            >
-              Schedule Demo
-            </Button>
+
+
+            <div className="mt-8 flex justify-center">
+              <Button
+                size="lg"
+                onClick={openLogin}
+                className="bg-primary text-primary-foreground hover:bg-primary/90"
+              >
+                Start Free Analysis
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </div>
+
           </div>
 
-          <p className="mt-6 text-sm text-foreground/60">
-            No credit card required • Takes less than 2 minutes • Secure and private
-          </p>
+
         </div>
 
         {/* Decorative elements */}
