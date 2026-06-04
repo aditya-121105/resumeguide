@@ -93,7 +93,9 @@ def forgot_password(
 
     return {
         "message":
-        "OTP sent successfully"
+            "OTP sent successfully",
+        "email":
+            user.email
     }
 
 def verify_reset_otp(

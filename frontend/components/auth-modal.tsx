@@ -5,7 +5,7 @@ import { useAuthModal } from '@/contexts/auth-modal-context';
 import { LoginModalForm } from './login-modal-form';
 import { RegisterModalForm } from './register-modal-form';
 import { X } from 'lucide-react';
-
+import { ForgotPasswordModalForm }  from '@/contexts/forgot-password-modal-form';
 export function AuthModal() {
   const { isOpen, modalType, close } = useAuthModal();
 
@@ -17,6 +17,9 @@ export function AuthModal() {
         {/* Content */}
         <div className="p-8">
           {modalType === 'login' && <LoginModalForm />}
+            {modalType === 'forgot-password' &&
+  <ForgotPasswordModalForm />
+}
           {modalType === 'register' && <RegisterModalForm />}
         </div>
       </DialogContent>

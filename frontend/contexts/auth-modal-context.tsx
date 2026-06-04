@@ -2,7 +2,11 @@
 
 import { createContext, useContext, useState, ReactNode } from 'react';
 
-type AuthModalType = 'login' | 'register' | null;
+type AuthModalType =
+  | 'login'
+  | 'register'
+  | 'forgot-password'
+  | null;
 
 interface AuthModalContextType {
   isOpen: boolean;
@@ -10,6 +14,7 @@ interface AuthModalContextType {
   openLogin: () => void;
   openRegister: () => void;
   close: () => void;
+  switchToForgotPassword: () => void;
   switchToLogin: () => void;
   switchToRegister: () => void;
 }
@@ -42,17 +47,20 @@ export function AuthModalProvider({ children }: { children: ReactNode }) {
   const switchToRegister = () => {
     setModalType('register');
   };
-
+  const switchToForgotPassword = () => {
+    setModalType('forgot-password');
+  };
   return (
     <AuthModalContext.Provider
       value={{
-        isOpen,
-        modalType,
-        openLogin,
-        openRegister,
-        close,
-        switchToLogin,
-        switchToRegister,
+      isOpen,
+      modalType,
+      openLogin,
+      openRegister,
+      close,
+      switchToLogin,
+      switchToRegister,
+      switchToForgotPassword,
       }}
     >
       {children}

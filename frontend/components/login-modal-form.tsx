@@ -9,7 +9,11 @@ import { useRouter } from 'next/navigation';
 import { useAuthModal } from '@/contexts/auth-modal-context';
 import { GoogleLogin } from "@react-oauth/google";
 export function LoginModalForm() {
-  const { switchToRegister, close } = useAuthModal();
+  const {
+  switchToRegister,
+  switchToForgotPassword,
+  close
+} = useAuthModal();
   const router = useRouter();
   const [username, setusername] = useState('');
   const [password, setPassword] = useState('');
@@ -257,13 +261,14 @@ const validateusername = (value: string) => {
 
         {/* Remember & Forgot Password */}
         <div className="flex items-center justify-between">
-          <label className="flex items-center gap-2 text-sm">
-            <Checkbox checked={rememberMe} onCheckedChange={setRememberMe} disabled={isLoading} />
-            <span className="text-foreground/70">Remember me</span>
-          </label>
-          <a href="#" className="text-xs font-medium text-primary hover:text-primary/80 transition-colors">
+
+          <button
+            type="button"
+            onClick={switchToForgotPassword}
+            className="text-xs font-medium text-primary hover:text-primary/80 transition-colors"
+          >
             Forgot password?
-          </a>
+          </button>
         </div>
 
         {/* Sign In Button */}
