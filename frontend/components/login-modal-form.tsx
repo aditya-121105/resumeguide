@@ -7,7 +7,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Lock, User, Chrome } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useAuthModal } from '@/contexts/auth-modal-context';
-
+import { GoogleLogin } from "@react-oauth/google";
 export function LoginModalForm() {
   const { switchToRegister, close } = useAuthModal();
   const router = useRouter();
@@ -139,14 +139,71 @@ const validateusername = (value: string) => {
       </div>
 
       {/* Google Sign In */}
-      <Button
-        onClick={() => console.log('[v0] Google OAuth clicked')}
-        variant="outline"
-        className="w-full mb-4 border-border bg-background hover:bg-muted"
-      >
-        <Chrome className="mr-2 h-4 w-4" />
-        Continue with Google
-      </Button>
+      <div className="mb-4 flex justify-center">
+  <GoogleLogin
+    onSuccess={async (
+      credentialResponse
+    ) => {
+
+      try {
+
+        const response = await fetch(
+          "http://127.0.0.1:8000/api/v1/auth/google",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type":
+                "application/json",
+            },
+            body: JSON.stringify({
+              id_token:
+                credentialResponse.credential,
+            }),
+          }
+        );
+
+        const data =
+          await response.json();
+
+        if (!response.ok) {
+          throw new Error(
+            data.detail ||
+            "Google login failed"
+          );
+        }
+
+        localStorage.setItem(
+          "access_token",
+          data.access_token
+        );
+
+        localStorage.setItem(
+          "token_type",
+          data.token_type
+        );
+
+        close();
+
+        router.push(
+          "/dashboard"
+        );
+
+      } catch (err: any) {
+
+        setError(
+          err.message ||
+          "Google login failed"
+        );
+      }
+    }}
+
+    onError={() => {
+      setError(
+        "Google login failed"
+      );
+    }}
+  />
+</div>
 
       {/* Divider */}
       <div className="mb-6 flex items-center gap-3">

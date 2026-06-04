@@ -5,11 +5,13 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Lock, Mail, User, Chrome, Eye, EyeOff } from 'lucide-react';
 import { useAuthModal } from '@/contexts/auth-modal-context';
+import { useRouter } from 'next/navigation';
 import {
   GoogleLogin
 } from "@react-oauth/google";
 
 export function RegisterModalForm() {
+  const router = useRouter();
   const [showOtpForm, setShowOtpForm] = useState(false);
   const [otp, setOtp] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
@@ -298,18 +300,60 @@ try {
 
       {/* Google Sign In */}
       <GoogleLogin
-  onSuccess={(credentialResponse) => {
+  onSuccess={async (credentialResponse) => {
 
-    console.log(
-      "ID Token:",
-      credentialResponse.credential
-    );
+    try {
 
+      const response = await fetch(
+        "http://127.0.0.1:8000/api/v1/auth/google",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type":
+              "application/json",
+          },
+          body: JSON.stringify({
+            id_token:
+              credentialResponse.credential,
+          }),
+        }
+      );
+
+      const data =
+        await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          data.detail ||
+          "Google login failed"
+        );
+      }
+
+      localStorage.setItem(
+        "access_token",
+        data.access_token
+      );
+
+      localStorage.setItem(
+        "token_type",
+        data.token_type
+      );
+      close();
+
+      router.push("/dashboard");
+
+    } catch (err: any) {
+
+      setError(
+        err.message ||
+        "Google login failed"
+      );
+    }
   }}
 
   onError={() => {
-    console.log(
-      "Google Login Failed"
+    setError(
+      "Google login failed"
     );
   }}
 />
