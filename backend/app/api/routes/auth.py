@@ -8,7 +8,19 @@ from app.auth.dependencies import get_current_user
 from fastapi.security import OAuth2PasswordRequestForm
 from app.schemas.pending_registration import VerifyOTPRequest
 from app.services.auth_services import verify_otp
+from app.schemas.google_auth import GoogleAuthRequest
+from app.services.google_auth_service import google_login
+from app.schemas.password_reset import (
+    ForgotPasswordRequest,
+    VerifyResetOTPRequest,
+    ResetPasswordRequest
+)
 
+from app.services.password_reset_service import (
+    forgot_password,
+    verify_reset_otp,
+    reset_password
+)
 
 router = APIRouter(
     prefix="/auth",
@@ -67,4 +79,53 @@ def verify_email_otp(
     return verify_otp(
         request=request,
         db=db
+    )
+@router.post(
+    "/google",
+    response_model=Token
+)
+def google_auth(
+    request: GoogleAuthRequest,
+    db: Session = Depends(get_db)
+):
+
+    return google_login(
+        token=request.id_token,
+        db=db
+    )
+
+@router.post(
+    "/forgot-password"
+)
+def forgot_password_route(
+    request: ForgotPasswordRequest,
+    db: Session = Depends(get_db)
+):
+    return forgot_password(
+        request,
+        db
+    )
+
+@router.post(
+    "/verify-reset-otp"
+)
+def verify_reset_otp_route(
+    request: VerifyResetOTPRequest,
+    db: Session = Depends(get_db)
+):
+    return verify_reset_otp(
+        request,
+        db
+    )
+
+@router.post(
+    "/reset-password"
+)
+def reset_password_route(
+    request: ResetPasswordRequest,
+    db: Session = Depends(get_db)
+):
+    return reset_password(
+        request,
+        db
     )

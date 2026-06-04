@@ -8,7 +8,7 @@ from app.db.database import Base, engine
 from app.models.user import User
 from app.models.resume import Resume
 from app.models.analysis import Analysis
-
+from app.models.password_reset_otp import PasswordResetOTP
 app = FastAPI(title=settings.APP_NAME)
 
 # CORS

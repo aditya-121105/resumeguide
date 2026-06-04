@@ -12,6 +12,7 @@ ai/
 
 # Environment Variables
 .env
+frontend/.env.local
 
 # Logs
 logs/

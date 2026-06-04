@@ -48,3 +48,56 @@ This OTP will expire in 5 minutes.
             to_email,
             message.as_string()
         )
+
+def send_password_reset_otp(
+    to_email: str,
+    otp: str
+):
+
+    subject = (
+        "ResumeGuide Password Reset OTP"
+    )
+
+    body = f"""
+Hello,
+
+You requested a password reset.
+
+Your OTP is:
+
+{otp}
+
+This OTP will expire in 5 minutes.
+
+If you did not request this,
+please ignore this email.
+
+ResumeGuide Team
+"""
+
+    message = MIMEMultipart()
+
+    message["From"] = settings.SMTP_EMAIL
+    message["To"] = to_email
+    message["Subject"] = subject
+
+    message.attach(
+        MIMEText(body, "plain")
+    )
+
+    with smtplib.SMTP(
+            "smtp.gmail.com",
+            587
+    ) as server:
+        server.starttls()
+
+        server.login(
+            settings.SMTP_EMAIL,
+            settings.SMTP_PASSWORD
+        )
+
+        server.sendmail(
+            settings.SMTP_EMAIL,
+            to_email,
+            message.as_string()
+        )

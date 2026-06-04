@@ -23,3 +23,8 @@ class User(Base):
         "Resume",
         back_populates="owner"
     )
+    auth_provider = Column(
+        String,
+        nullable=False,
+        default="local"
+    )
