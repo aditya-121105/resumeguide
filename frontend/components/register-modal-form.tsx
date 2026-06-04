@@ -5,7 +5,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Lock, Mail, User, Chrome, Eye, EyeOff } from 'lucide-react';
 import { useAuthModal } from '@/contexts/auth-modal-context';
-import { useGoogleLogin } from "@react-oauth/google";
+import {
+  GoogleLogin
+} from "@react-oauth/google";
 
 export function RegisterModalForm() {
   const [showOtpForm, setShowOtpForm] = useState(false);
@@ -26,15 +28,7 @@ export function RegisterModalForm() {
   const [confirmPasswordError, setConfirmPasswordError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const googleLogin = useGoogleLogin({
-        onSuccess: (tokenResponse) => {
-          console.log("Access Token:", tokenResponse.access_token);
-        },
 
-        onError: () => {
-          console.log("Google Login Failed");
-        },
-      });
   const handleVerifyOtp = async () => {
       setError("");
       try {
@@ -303,14 +297,22 @@ try {
       </div>
 
       {/* Google Sign In */}
-      <Button
-        onClick={() => googleLogin()}
-        variant="outline"
-        className="w-full mb-4 border-border bg-background hover:bg-muted"
-      >
-        <Chrome className="mr-2 h-4 w-4" />
-        Continue with Google
-      </Button>
+      <GoogleLogin
+  onSuccess={(credentialResponse) => {
+
+    console.log(
+      "ID Token:",
+      credentialResponse.credential
+    );
+
+  }}
+
+  onError={() => {
+    console.log(
+      "Google Login Failed"
+    );
+  }}
+/>
 
       {/* Divider */}
       <div className="mb-6 flex items-center gap-3">
