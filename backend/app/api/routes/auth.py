@@ -6,7 +6,8 @@ from app.schemas.user import UserCreate, UserResponse, UserLogin, Token
 from app.services.auth_services import register_user, login_user
 from app.auth.dependencies import get_current_user
 from fastapi.security import OAuth2PasswordRequestForm
-
+from app.schemas.pending_registration import VerifyOTPRequest
+from app.services.auth_services import verify_otp
 
 router = APIRouter(
     prefix="/auth",
@@ -16,7 +17,7 @@ router = APIRouter(
 
 @router.post(
     "/register",
-    response_model=UserResponse
+
 )
 def register(user: UserCreate, db: Session = Depends(get_db)):
     return register_user(user, db)
@@ -56,3 +57,13 @@ def get_me(
         "email": current_user.email,
         "username": current_user.username
     }
+
+@router.post("/verify-otp")
+def verify_email_otp(
+    request: VerifyOTPRequest,
+    db: Session = Depends(get_db)
+):
+    return verify_otp(
+        request=request,
+        db=db
+    )
