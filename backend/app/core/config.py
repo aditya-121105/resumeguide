@@ -17,7 +17,8 @@ class Settings(BaseSettings):
     AWS_ACCESS_KEY_ID: str
     AWS_SECRET_ACCESS_KEY: str
     AWS_REGION: str
-
+    SMTP_EMAIL: str
+    SMTP_PASSWORD: str
     SES_FROM_EMAIL: str
 
     class Config:

@@ -1,65 +1,50 @@
-import boto3
+import smtplib
+
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
 from app.core.config import settings
 
-
-ses_client = boto3.client(
-    "ses",
-    region_name=settings.AWS_REGION,
-    aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
-    aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY
-)
-
-
-def send_test_email(
-    to_email: str
-):
-
-    response = ses_client.send_email(
-        Source=settings.SES_FROM_EMAIL,
-        Destination={
-            "ToAddresses": [
-                to_email
-            ]
-        },
-        Message={
-            "Subject": {
-                "Data": "ResumeGuide SES Test"
-            },
-            "Body": {
-                "Text": {
-                    "Data":
-                    "AWS SES is working successfully."
-                }
-            }
-        }
-    )
-
-    return response
 
 def send_otp_email(
     to_email: str,
     otp: str
 ):
 
-    response = ses_client.send_email(
-        Source=settings.SES_FROM_EMAIL,
-        Destination={
-            "ToAddresses": [to_email]
-        },
-        Message={
-            "Subject": {
-                "Data": "ResumeGuide Email Verification OTP"
-            },
-            "Body": {
-                "Text": {
-                    "Data": (
-                        f"Your ResumeGuide OTP is: {otp}\n\n"
-                        "This OTP will expire in 5 minutes."
-                    )
-                }
-            }
-        }
+    subject = "ResumeGuide Email Verification OTP"
+
+    body = f"""
+Your ResumeGuide OTP is:
+
+{otp}
+
+This OTP will expire in 5 minutes.
+"""
+
+    message = MIMEMultipart()
+
+    message["From"] = settings.SMTP_EMAIL
+    message["To"] = to_email
+    message["Subject"] = subject
+
+    message.attach(
+        MIMEText(body, "plain")
     )
 
-    return response
+    with smtplib.SMTP(
+        "smtp.gmail.com",
+        587
+    ) as server:
+
+        server.starttls()
+
+        server.login(
+            settings.SMTP_EMAIL,
+            settings.SMTP_PASSWORD
+        )
+
+        server.sendmail(
+            settings.SMTP_EMAIL,
+            to_email,
+            message.as_string()
+        )

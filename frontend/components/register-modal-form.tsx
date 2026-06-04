@@ -7,6 +7,9 @@ import { Lock, Mail, User, Chrome, Eye, EyeOff } from 'lucide-react';
 import { useAuthModal } from '@/contexts/auth-modal-context';
 
 export function RegisterModalForm() {
+  const [showOtpForm, setShowOtpForm] = useState(false);
+  const [otp, setOtp] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
   const { switchToLogin } = useAuthModal();
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
@@ -22,7 +25,47 @@ export function RegisterModalForm() {
   const [confirmPasswordError, setConfirmPasswordError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const handleVerifyOtp = async () => {
+      setError("");
+      try {
 
+        const response = await fetch(
+          "http://127.0.0.1:8000/api/v1/auth/verify-otp",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              email,
+              otp,
+            }),
+          }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(
+            data.detail || data.message || "OTP verification failed"
+          );
+        }
+
+        setSuccessMessage(
+          "Email verified successfully! Redirecting to login..."
+        );
+
+        setTimeout(() => {
+          switchToLogin();
+        }, 1500);
+
+      } catch (err: any) {
+
+        setError(
+          err.message || "Invalid OTP"
+        );
+      }
+    };
   const calculatePasswordStrength = (pwd: string): { score: number; label: string; color: string } => {
     let score = 0;
     if (!pwd) return { score: 0, label: '', color: '' };
@@ -183,11 +226,12 @@ try {
 
   if (!response.ok) {
     throw new Error(
-      data.detail || "Failed to create account"
+      data.detail || data.message || "Failed to create account"
     );
   }
 
-  switchToLogin();
+  setShowOtpForm(true);
+  setError("");
 } catch (err: any) {
   setError(
     err.message || "Failed to create account. Please try again."
@@ -196,8 +240,46 @@ try {
   setIsLoading(false);
 }
   };
+  if (showOtpForm) {
+    return (
+      <div className="w-full">
+        <h2 className="text-2xl font-bold text-center mb-4">
+          Verify Email
+        </h2>
+
+        <p className="text-center text-sm text-muted-foreground mb-6">
+          Enter the OTP sent to {email}
+        </p>
+
+        {error && (
+          <div className="mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-600">
+            {error}
+          </div>
+        )}
+        {successMessage && (
+          <div className="mb-4 rounded-lg bg-green-50 p-3 text-sm text-green-600">
+            {successMessage}
+          </div>
+        )}
+
+        <Input
+          placeholder="Enter OTP"
+          value={otp}
+          onChange={(e) => setOtp(e.target.value)}
+        />
+
+        <Button
+          className="w-full mt-4"
+          onClick={handleVerifyOtp}
+        >
+          Verify OTP
+        </Button>
+      </div>
+    );
+  }
 
   return (
+
     <div className="w-full">
       {/* Header */}
       <div className="mb-8 text-center">
