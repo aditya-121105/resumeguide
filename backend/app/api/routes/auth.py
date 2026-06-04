@@ -9,6 +9,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 from app.schemas.pending_registration import VerifyOTPRequest
 from app.services.auth_services import verify_otp
 
+
 router = APIRouter(
     prefix="/auth",
     tags=["Authentication"]

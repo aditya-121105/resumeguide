@@ -10,7 +10,7 @@ from fastapi import HTTPException
 from app.auth.jwt import create_access_token
 from app.models.pending_registration import PendingRegistration
 from app.utils.otp import generate_otp
-
+from app.services.email_service import send_otp_email
 from datetime import datetime, timedelta
 
 def register_user(
@@ -58,8 +58,9 @@ def register_user(
 
     db.refresh(pending_user)
 
-    print(
-        f"OTP for {user.email}: {otp}"
+    send_otp_email(
+        user.email,
+        otp
     )
 
     return {
