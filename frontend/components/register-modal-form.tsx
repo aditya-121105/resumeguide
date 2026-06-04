@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Lock, Mail, User, Chrome, Eye, EyeOff } from 'lucide-react';
 import { useAuthModal } from '@/contexts/auth-modal-context';
+import { useGoogleLogin } from "@react-oauth/google";
 
 export function RegisterModalForm() {
   const [showOtpForm, setShowOtpForm] = useState(false);
@@ -25,6 +26,15 @@ export function RegisterModalForm() {
   const [confirmPasswordError, setConfirmPasswordError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const googleLogin = useGoogleLogin({
+        onSuccess: (tokenResponse) => {
+          console.log("Access Token:", tokenResponse.access_token);
+        },
+
+        onError: () => {
+          console.log("Google Login Failed");
+        },
+      });
   const handleVerifyOtp = async () => {
       setError("");
       try {
@@ -294,7 +304,7 @@ try {
 
       {/* Google Sign In */}
       <Button
-        onClick={() => console.log('[v0] Google OAuth clicked')}
+        onClick={() => googleLogin()}
         variant="outline"
         className="w-full mb-4 border-border bg-background hover:bg-muted"
       >
@@ -345,7 +355,7 @@ try {
 
             <Input
               type="text"
-              placeholder="aditya121105"
+              placeholder="username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               className="pl-10 border-border bg-background focus:border-primary focus:ring-primary/20"

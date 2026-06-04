@@ -4,6 +4,7 @@ import { Analytics } from '@vercel/analytics/next'
 import { AuthModalProvider } from '@/contexts/auth-modal-context'
 import { AuthModal } from '@/components/auth-modal'
 import './globals.css'
+import GoogleProvider from "@/components/google-provider";
 
 const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
@@ -39,10 +40,12 @@ export default function RootLayout({
   return (
     <html lang="en" className="bg-background">
       <body className="font-sans antialiased">
-        <AuthModalProvider>
-          {children}
-          <AuthModal />
-        </AuthModalProvider>
+        <GoogleProvider>
+          <AuthModalProvider>
+            {children}
+            <AuthModal />
+          </AuthModalProvider>
+        </GoogleProvider>
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>
