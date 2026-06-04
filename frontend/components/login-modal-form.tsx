@@ -4,31 +4,35 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Lock, Mail, Chrome } from 'lucide-react';
+import { Lock, User, Chrome } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useAuthModal } from '@/contexts/auth-modal-context';
 
 export function LoginModalForm() {
-  const { switchToRegister } = useAuthModal();
-  const [email, setEmail] = useState('');
+  const { switchToRegister, close } = useAuthModal();
+  const router = useRouter();
+  const [username, setusername] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
-  const [emailError, setEmailError] = useState('');
+  const [usernameError, setusernameError] = useState('');
   const [passwordError, setPasswordError] = useState('');
 
-  const validateEmail = (value: string) => {
-    if (!value) {
-      setEmailError('Email is required');
-      return false;
-    }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-      setEmailError('Please enter a valid email');
-      return false;
-    }
-    setEmailError('');
-    return true;
-  };
+const validateusername = (value: string) => {
+  if (!value) {
+    setusernameError('username is required');
+    return false;
+  }
+
+  if (value.length < 3) {
+    setusernameError('username must be at least 3 characters');
+    return false;
+  }
+
+  setusernameError('');
+  return true;
+};
 
   const validatePassword = (value: string) => {
     if (!value) {
@@ -43,11 +47,11 @@ export function LoginModalForm() {
     return true;
   };
 
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleusernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    setEmail(value);
-    if (emailError) {
-      validateEmail(value);
+    setusername(value);
+    if (usernameError) {
+      validateusername(value);
     }
   };
 
@@ -63,22 +67,62 @@ export function LoginModalForm() {
     e.preventDefault();
     setError('');
 
-    const isEmailValid = validateEmail(email);
+    const isusernameValid = validateusername(username);
     const isPasswordValid = validatePassword(password);
 
-    if (!isEmailValid || !isPasswordValid) {
+    if (!isusernameValid || !isPasswordValid) {
       return;
     }
 
     setIsLoading(true);
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      console.log('[v0] Login attempt:', { email, rememberMe });
-    } catch (err) {
-      setError('Failed to sign in. Please try again.');
-    } finally {
-      setIsLoading(false);
-    }
+
+        try {
+          const formData = new URLSearchParams();
+
+          formData.append("username", username);
+          formData.append("password", password);
+
+          const response = await fetch(
+            "http://127.0.0.1:8000/api/v1/auth/login",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type":
+                  "application/x-www-form-urlencoded",
+              },
+              body: formData,
+            }
+          );
+
+          const data = await response.json();
+
+          if (!response.ok) {
+            throw new Error(
+              data.detail || "Invalid credentials"
+            );
+          }
+
+          localStorage.setItem(
+            "access_token",
+            data.access_token
+          );
+
+          localStorage.setItem(
+            "token_type",
+            data.token_type
+          );
+
+          close();
+
+          router.push("/dashboard");
+
+        } catch (err: any) {
+          setError(
+            err.message || "Failed to sign in"
+          );
+        } finally {
+          setIsLoading(false);
+        }
   };
 
   return (
@@ -107,7 +151,7 @@ export function LoginModalForm() {
       {/* Divider */}
       <div className="mb-6 flex items-center gap-3">
         <div className="flex-1 border-t border-border" />
-        <span className="text-xs text-foreground/50">or continue with email</span>
+        <span className="text-xs text-foreground/50">or continue with username</span>
         <div className="flex-1 border-t border-border" />
       </div>
 
@@ -120,21 +164,21 @@ export function LoginModalForm() {
 
       {/* Form */}
       <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Email Field */}
+        {/* username Field */}
         <div>
-          <label className="mb-2 block text-sm font-medium text-foreground">Email</label>
+          <label className="mb-2 block text-sm font-medium text-foreground">Username</label>
           <div className="relative">
-            <Mail className="absolute left-3 top-3 h-4 w-4 text-foreground/40" />
+            <User className="absolute left-3 top-3 h-4 w-4 text-foreground/40" />
             <Input
-              type="email"
-              placeholder="you@example.com"
-              value={email}
-              onChange={handleEmailChange}
+              type="text"
+              placeholder="Username"
+              value={username}
+              onChange={handleusernameChange}
               className="pl-10 border-border bg-background focus:border-primary focus:ring-primary/20"
               disabled={isLoading}
             />
           </div>
-          {emailError && <p className="mt-1 text-xs text-red-600">{emailError}</p>}
+          {usernameError && <p className="mt-1 text-xs text-red-600">{usernameError}</p>}
         </div>
 
         {/* Password Field */}

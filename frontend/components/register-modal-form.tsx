@@ -10,12 +10,14 @@ export function RegisterModalForm() {
   const { switchToLogin } = useAuthModal();
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [nameError, setNameError] = useState('');
   const [emailError, setEmailError] = useState('');
+  const [usernameError, setUsernameError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [confirmPasswordError, setConfirmPasswordError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -63,7 +65,20 @@ export function RegisterModalForm() {
     setEmailError('');
     return true;
   };
+const validateUsername = (value: string) => {
+  if (!value) {
+    setUsernameError('Username is required');
+    return false;
+  }
 
+  if (value.length < 3) {
+    setUsernameError('Username must be at least 3 characters');
+    return false;
+  }
+
+  setUsernameError('');
+  return true;
+};
   const validatePassword = (value: string) => {
     if (!value) {
       setPasswordError('Password is required');
@@ -134,16 +149,52 @@ export function RegisterModalForm() {
     if (!isNameValid || !isEmailValid || !isPasswordValid || !isConfirmPasswordValid) {
       return;
     }
+    const isUsernameValid = validateUsername(username);
 
+if (
+  !isNameValid ||
+  !isUsernameValid ||
+  !isEmailValid ||
+  !isPasswordValid ||
+  !isConfirmPasswordValid
+) {
+  return;
+}
     setIsLoading(true);
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      console.log('[v0] Registration attempt:', { fullName, email });
-    } catch (err) {
-      setError('Failed to create account. Please try again.');
-    } finally {
-      setIsLoading(false);
+
+try {
+  const response = await fetch(
+    "http://127.0.0.1:8000/api/v1/auth/register",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        full_name: fullName,
+        email: email,
+        username: username,
+        password: password,
+      }),
     }
+  );
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(
+      data.detail || "Failed to create account"
+    );
+  }
+
+  switchToLogin();
+} catch (err: any) {
+  setError(
+    err.message || "Failed to create account. Please try again."
+  );
+} finally {
+  setIsLoading(false);
+}
   };
 
   return (
@@ -201,7 +252,30 @@ export function RegisterModalForm() {
           </div>
           {nameError && <p className="mt-1 text-xs text-red-600">{nameError}</p>}
         </div>
+        {/*UserName*/}
+        <div>
+          <label className="mb-2 block text-sm font-medium text-foreground">
+            Username
+          </label>
 
+          <div className="relative">
+            <User className="absolute left-3 top-3 h-4 w-4 text-foreground/40" />
+
+            <Input
+              type="text"
+              placeholder="aditya121105"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="pl-10 border-border bg-background focus:border-primary focus:ring-primary/20"
+              disabled={isLoading}
+            />
+          </div>
+          {usernameError && (
+            <p className="mt-1 text-xs text-red-600">
+              {usernameError}
+            </p>
+          )}
+        </div>
         {/* Email Field */}
         <div>
           <label className="mb-2 block text-sm font-medium text-foreground">Email</label>
