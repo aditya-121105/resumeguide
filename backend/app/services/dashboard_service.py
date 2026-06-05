@@ -30,10 +30,10 @@ def get_dashboard_data(
     )
     if analyses:
 
-        average_match_score = round(
+        average_score = round(
 
             sum(
-                analysis.match_percentage
+                analysis.score
 
                 for analysis in analyses
             )
@@ -45,10 +45,10 @@ def get_dashboard_data(
 
     else:
 
-        average_match_score = 0
+        average_score = 0
     if analyses:
 
-        highest_match_score = max(
+        highest_score = max(
 
             analysis.match_percentage
 
@@ -57,33 +57,8 @@ def get_dashboard_data(
 
     else:
 
-        highest_match_score = 0
-    all_missing_skills = []
-    for analysis in analyses:
-
-        if analysis.missing_skills:
-            skills = (
-                analysis.missing_skills
-                .split(",")
-            )
-
-            all_missing_skills.extend(
-                skills
-            )
-    common_skills = Counter(
-
-        all_missing_skills
-
-    ).most_common(5)
-    most_common_missing_skills = [
-
-        skill
-
-        for skill, count
-
-        in common_skills
-    ]
-    return {
+        highest_score = 0
+        return {
 
         "total_resumes":
             total_resumes,
@@ -91,12 +66,11 @@ def get_dashboard_data(
         "total_analyses":
             total_analyses,
 
-        "average_match_score":
-            average_match_score,
+        "average_score":
+            average_score,
 
-        "highest_match_score":
-            highest_match_score,
+        "highest_score":
+            highest_score,
 
-        "most_common_missing_skills":
-            most_common_missing_skills
+
     }

@@ -3,6 +3,7 @@ from sqlalchemy import (
     Integer,
     Float,
     Text,
+    String,
     DateTime,
     ForeignKey
 )
@@ -17,20 +18,42 @@ class Analysis(Base):
 
     __tablename__ = "analysis"
 
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(
+        Integer,
+        primary_key=True,
+        index=True
+    )
 
     resume_id = Column(
         Integer,
-        ForeignKey("resumes.id")
+        ForeignKey("resumes.id"),
+        nullable=False
     )
 
-    job_description = Column(Text)
+    analysis_type = Column(
+        String,
+        nullable=False
+    )
 
-    match_percentage = Column(Float)
+    target_role = Column(
+        String,
+        nullable=True
+    )
 
-    matched_skills = Column(Text)
+    job_description = Column(
+        Text,
+        nullable=True
+    )
 
-    missing_skills = Column(Text)
+    score = Column(
+        Float,
+        nullable=True
+    )
+
+    analysis_result = Column(
+        Text,
+        nullable=True
+    )
 
     created_at = Column(
         DateTime,

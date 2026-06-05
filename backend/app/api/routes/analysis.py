@@ -23,6 +23,12 @@ from app.analysis.skill_analyzer import (
     compare_skills
 )
 from pydantic import BaseModel
+from app.schemas.analysis import (
+    AnalysisCreateRequest
+)
+from app.services.analysis_service import (
+    create_analysis_service
+)
 
 
 class JobDescriptionRequest(BaseModel):
@@ -112,4 +118,31 @@ def dashboard(
         db,
 
         current_user.id
+    )
+
+@router.post("/create")
+def create_analysis(
+
+    request: AnalysisCreateRequest,
+
+    db: Session = Depends(get_db),
+
+    current_user: User = Depends(
+        get_current_user
+    )
+):
+
+    return create_analysis_service(
+
+        resume_id=request.resume_id,
+
+        analysis_type=request.analysis_type,
+
+        target_role=request.target_role,
+
+        job_description=request.job_description,
+
+        db=db,
+
+        current_user=current_user
     )
