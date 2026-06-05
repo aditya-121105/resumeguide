@@ -198,7 +198,11 @@ def create_analysis_service(
             job_description
         )
 
-        score = result["match_percentage"]
+        score = result[
+            "job_description_analysis"
+        ][
+            "match_percentage"
+        ]
 
     else:
 

@@ -1,3 +1,39 @@
+DIRECT_ROLE_PATTERNS = {
+
+    "Backend Engineer": [
+        "backend engineer",
+        "backend developer",
+        "python backend developer"
+    ],
+
+    "Frontend Engineer": [
+        "frontend engineer",
+        "frontend developer",
+        "react developer"
+    ],
+
+    "Machine Learning Engineer": [
+        "machine learning engineer",
+        "ml engineer",
+        "ai engineer"
+    ],
+
+    "Data Analyst": [
+        "data analyst",
+        "business analyst"
+    ],
+
+    "DevOps Engineer": [
+        "devops engineer",
+        "site reliability engineer",
+        "sre"
+    ],
+
+    "Cloud Engineer": [
+        "cloud engineer",
+        "cloud architect"
+    ]
+}
 ROLE_KEYWORDS = {
 
     "Backend Engineer": [
@@ -53,7 +89,14 @@ ROLE_KEYWORDS = {
 def detect_role(
     job_description: str
 ):
+    jd = job_description.lower()
 
+    for role, patterns in DIRECT_ROLE_PATTERNS.items():
+
+        for pattern in patterns:
+
+            if pattern in jd:
+                return role
     jd = job_description.lower()
 
     role_scores = {}
