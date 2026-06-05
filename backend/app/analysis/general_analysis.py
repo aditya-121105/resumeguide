@@ -29,29 +29,13 @@ def generate_general_analysis(
     return {
 
         "ats_score":
-        ats_analysis["ats_score"],
+            ats_analysis["ats_score"],
 
         "score_breakdown":
-        ats_analysis["score_breakdown"],
+            ats_analysis["score_breakdown"],
 
-        "detected_skills":
-            skills,
 
-        "detected_certifications":
-            certifications,
 
         "recommended_roles":
-            roles,
-
-        "strengths": [
-            "Skills section detected"
-            if skills else
-            "No major skills detected"
-        ],
-
-        "recommendations": [
-            "Add more relevant projects",
-            "Add certifications",
-            "Improve ATS keywords"
-        ]
+            roles
     }

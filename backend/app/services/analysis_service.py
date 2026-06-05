@@ -3,12 +3,11 @@ from sqlalchemy.orm import Session
 from app.models.resume import Resume
 from app.models.user import User
 from app.models.analysis import Analysis
-from app.analysis.ats_engine import generate_ats_analysi
+from app.analysis.ats_engine import generate_ats_analysis
 from app.analysis.general_analysis import generate_general_analysis
 from app.analysis.role_analysis import generate_role_analysis
 from app.analysis.jd_analysis import generate_jd_analysis
 import json
-
 
 def get_analysis_history_service(
     db: Session,
@@ -155,21 +154,35 @@ def create_analysis_service(
 
         score = result["ats_score"]
 
+
     elif analysis_type == "role":
 
         if not target_role:
-
             raise HTTPException(
+
                 status_code=400,
+
                 detail="Target role required"
+
             )
 
         result = generate_role_analysis(
+
             resume.resume_text,
+
             target_role
+
         )
 
-        score = result["score"]
+        score = result[
+
+            "role_analysis"
+
+        ][
+
+            "score"
+
+        ]
 
     elif analysis_type == "job_description":
 
