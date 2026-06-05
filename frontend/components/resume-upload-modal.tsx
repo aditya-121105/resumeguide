@@ -35,30 +35,6 @@ export function ResumeUploadModal({ isOpen, onClose }: ResumeUploadModalProps) {
     return { valid: true };
   };
 
-  const simulateUpload = (file: File): Promise<void> => {
-    return new Promise((resolve) => {
-      let progress = 0;
-      const interval = setInterval(() => {
-        progress += Math.random() * 30;
-        if (progress >= 100) {
-          progress = 100;
-          clearInterval(interval);
-          setUploadProgress(100);
-          setTimeout(resolve, 300);
-        } else {
-          setUploadProgress(Math.min(progress, 99));
-        }
-      }, 200);
-    });
-  };
-
-  const simulateAnalysis = (): Promise<void> => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve();
-      }, 2000);
-    });
-  };
 
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault();
@@ -102,37 +78,80 @@ export function ResumeUploadModal({ isOpen, onClose }: ResumeUploadModalProps) {
   };
 
   const handleUpload = async () => {
-    if (!selectedFile) return;
 
-    try {
-      setIsUploading(true);
-      setUploadStatus('idle');
+  if (!selectedFile) return;
 
-      // Simulate upload
-      await simulateUpload(selectedFile);
-      setUploadProgress(100);
+  try {
 
-      // Simulate analysis
-      setIsAnalyzing(true);
-      await simulateAnalysis();
+    setIsUploading(true);
+    setUploadStatus('idle');
 
-      setUploadStatus('success');
-      setIsUploading(false);
-      setIsAnalyzing(false);
+    const token =
+      localStorage.getItem(
+        "access_token"
+      );
 
-      // Navigate to resume analysis after a brief delay
-      setTimeout(() => {
-        onClose();
-        router.push('/dashboard/resume-analysis');
-      }, 1000);
-    } catch (error) {
-      setUploadStatus('error');
-      setErrorMessage('Upload failed. Please try again.');
-      setIsUploading(false);
-      setIsAnalyzing(false);
+    const formData =
+      new FormData();
+
+    formData.append(
+      "file",
+      selectedFile
+    );
+
+    const response =
+      await fetch(
+        "http://127.0.0.1:8000/api/v1/resume/upload",
+        {
+          method: "POST",
+          headers: {
+            Authorization:
+              `Bearer ${token}`,
+          },
+          body: formData,
+        }
+      );
+
+    const data =
+      await response.json();
+
+    if (!response.ok) {
+
+      throw new Error(
+        data.detail ||
+        "Upload failed"
+      );
     }
-  };
 
+    setUploadStatus(
+      "success"
+    );
+
+    setTimeout(() => {
+
+      onClose();
+
+      router.push(
+        "/dashboard/resumes"
+      );
+
+    }, 1000);
+
+  } catch (err: any) {
+
+    setUploadStatus(
+      "error"
+    );
+
+    setErrorMessage(
+      err.message
+    );
+
+  } finally {
+
+    setIsUploading(false);
+  }
+};
   const handleReset = () => {
     setSelectedFile(null);
     setUploadProgress(0);

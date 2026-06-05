@@ -6,6 +6,7 @@ from fastapi import (
     HTTPException
 )
 
+
 from sqlalchemy.orm import Session
 
 from app.models.resume import Resume
@@ -108,3 +109,32 @@ def get_user_resumes_service(
 
         for resume in resumes
     ]
+
+def get_resume_details_service(
+    resume_id: int,
+    db: Session,
+    current_user: User
+):
+
+    resume = db.query(
+        Resume
+    ).filter(
+        Resume.id == resume_id,
+        Resume.owner_id ==
+        current_user.id
+    ).first()
+
+    if not resume:
+
+        raise HTTPException(
+            status_code=404,
+            detail="Resume not found"
+        )
+
+    return {
+        "resume_id": resume.id,
+        "file_name": resume.file_name,
+        "uploaded_at": resume.uploaded_at,
+        "analysis_count":
+            len(resume.analyses)
+    }

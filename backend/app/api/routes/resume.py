@@ -16,13 +16,12 @@ from app.auth.dependencies import get_current_user
 from app.services.pdf_services import extract_text_from_pdf
 from app.models.user import User
 from app.models.resume import Resume
-from app.services.resume_service import (
-    upload_resume_service
-)
-from app.services.resume_service import (
-    get_user_resumes_service
-)
 
+from app.services.resume_service import (
+    upload_resume_service,
+    get_user_resumes_service,
+    get_resume_details_service
+)
 
 router = APIRouter(
     prefix="/resume",
@@ -65,4 +64,25 @@ def get_my_resumes(
         db=db,
 
         current_user=current_user
+    )
+
+@router.get("/{resume_id}")
+def get_resume_details(
+
+    resume_id: int,
+
+    db: Session = Depends(get_db),
+
+    current_user: User = Depends(
+        get_current_user
+    )
+):
+
+    return get_resume_details_service(
+
+        resume_id,
+
+        db,
+
+        current_user
     )

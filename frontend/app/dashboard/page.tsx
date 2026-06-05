@@ -1,97 +1,135 @@
 'use client';
 
-import { motion } from 'framer-motion';
 import { DashboardLayout } from '@/components/dashboard-layout';
-import { QuickActionsSection } from '@/components/quick-actions-section';
-import { AiCoachCard } from '@/components/ai-coach-card';
-import { ResumeVersionTracking } from '@/components/resume-version-tracking';
-import { PrimaryMetricsSection } from '@/components/primary-metrics-section';
-import { JobReadinessInsights } from '@/components/job-readiness-insights';
+import { useState } from 'react';
 import { ResumeUploadModal } from '@/components/resume-upload-modal';
-import { mockDashboardData } from '@/lib/mock-dashboard-data';
-import { useEffect, useState } from 'react';
 
 export default function DashboardPage() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [data, setData] = useState(mockDashboardData);
-  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
-
-  useEffect(() => {
-    // Simulate data loading
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 500);
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  const pageVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        duration: 0.5,
-        staggerChildren: 0.1,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.5 },
-    },
-  };
-
+  const [isUploadModalOpen,
+setIsUploadModalOpen] =
+useState(false);
   return (
     <DashboardLayout>
-      <motion.div variants={pageVariants} initial="hidden" animate="visible">
-        {/* Welcome Header */}
-        <motion.div variants={itemVariants} className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground">
-            Welcome back, {data.user.name}
+
+      <div className="space-y-8">
+
+        {/* Welcome */}
+        <div>
+          <h1 className="text-3xl font-bold">
+            Hello Aditya 👋
           </h1>
-          <p className="mt-2 text-foreground/60">
-            Here&apos;s your career intelligence overview
+
+          <p className="mt-2 text-muted-foreground">
+            Welcome back to ResumeGuide
           </p>
-        </motion.div>
+        </div>
 
-        {/* Quick Actions Section */}
-        <motion.div variants={itemVariants}>
-          <QuickActionsSection
-            actions={data.quickActions}
-            onUploadClick={() => setIsUploadModalOpen(true)}
-          />
-        </motion.div>
+        {/* Statistics */}
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
 
-        {/* AI Career Coach Card */}
-        <motion.div variants={itemVariants} className="mt-12">
-          <AiCoachCard insight={data.aiCoachInsights} />
-        </motion.div>
+          <div className="rounded-xl border p-6">
+            <p className="text-sm text-muted-foreground">
+              Total Resumes
+            </p>
 
-        {/* Resume Version Tracking */}
-        <motion.div variants={itemVariants} className="mt-8">
-          <ResumeVersionTracking versions={data.resumeVersions} />
-        </motion.div>
+            <h2 className="mt-2 text-3xl font-bold">
+              3
+            </h2>
+          </div>
 
-        {/* Primary Metrics Section */}
-        <motion.div variants={itemVariants} className="mt-8">
-          <PrimaryMetricsSection scores={data.scores} trends={data.scoreTrends} />
-        </motion.div>
+          <div className="rounded-xl border p-6">
+            <p className="text-sm text-muted-foreground">
+              Total Analyses
+            </p>
 
-        {/* Job Readiness Insights */}
-        <motion.div variants={itemVariants} className="mt-8">
-          <JobReadinessInsights categories={data.jobReadiness} />
-        </motion.div>
-      </motion.div>
+            <h2 className="mt-2 text-3xl font-bold">
+              12
+            </h2>
+          </div>
 
-      {/* Resume Upload Modal */}
+          <div className="rounded-xl border p-6">
+            <p className="text-sm text-muted-foreground">
+              Average Score
+            </p>
+
+            <h2 className="mt-2 text-3xl font-bold">
+              82%
+            </h2>
+          </div>
+
+          <div className="rounded-xl border p-6">
+            <p className="text-sm text-muted-foreground">
+              Best Score
+            </p>
+
+            <h2 className="mt-2 text-3xl font-bold">
+              91%
+            </h2>
+          </div>
+
+        </div>
+
+        {/* Quick Actions */}
+        <div className="rounded-xl border p-6">
+
+          <h2 className="text-xl font-semibold">
+            Quick Actions
+          </h2>
+
+          <div className="mt-4 flex flex-wrap gap-4">
+
+            <button
+              className="rounded-lg border px-4 py-2"
+              onClick={() =>
+                setIsUploadModalOpen(true)
+              }
+            >
+              Upload Resume
+            </button>
+
+            <button className="rounded-lg border px-4 py-2">
+              New Analysis
+            </button>
+
+            <button className="rounded-lg border px-4 py-2">
+              View Analyses
+            </button>
+
+          </div>
+
+        </div>
+
+        {/* Getting Started */}
+        <div className="rounded-xl border p-6">
+
+          <h2 className="text-xl font-semibold">
+            Getting Started
+          </h2>
+
+          <ol className="mt-4 space-y-3 list-decimal list-inside">
+
+            <li>Upload a resume</li>
+
+            <li>Choose an analysis type</li>
+
+            <li>Generate analysis</li>
+
+            <li>Review recommendations</li>
+
+            <li>Improve your resume</li>
+
+          </ol>
+
+        </div>
+
+      </div>
       <ResumeUploadModal
         isOpen={isUploadModalOpen}
-        onClose={() => setIsUploadModalOpen(false)}
+        onClose={() =>
+          setIsUploadModalOpen(false)
+        }
       />
+
     </DashboardLayout>
   );
 }

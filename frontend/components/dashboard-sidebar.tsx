@@ -2,7 +2,17 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { BarChart3, Home, Briefcase, MapPin, Settings, LogOut, Menu, X, FileText, GraduationCap, TrendingUp, Zap, User } from 'lucide-react';
+import {
+  Home,
+  Settings,
+  LogOut,
+  Menu,
+  X,
+  FileText,
+  User,
+  PlusCircle,
+  BarChart3,
+} from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 
@@ -10,17 +20,33 @@ export function DashboardSidebar() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
 
-  const navItems = [
-    { href: '/dashboard', label: 'Overview', icon: Home },
-    { href: '/dashboard/resume-analysis', label: 'Resume Analysis', icon: FileText },
-    { href: '/dashboard/skill-gap', label: 'Skill Gap Analysis', icon: Zap },
-    { href: '/dashboard/target-roles', label: 'Target Roles', icon: Briefcase },
-    { href: '/dashboard/career-roadmap', label: 'Career Roadmap', icon: MapPin },
-    { href: '/dashboard/projects', label: 'Projects', icon: TrendingUp },
-    { href: '/dashboard/certifications', label: 'Certifications', icon: GraduationCap },
-    { href: '/dashboard/analytics', label: 'Analytics', icon: BarChart3 },
-    { href: '/dashboard/profile', label: 'Profile', icon: User },
-  ];
+const navItems = [
+  {
+    href: '/dashboard',
+    label: 'Dashboard',
+    icon: Home,
+  },
+  {
+    href: '/dashboard/analyses',
+    label: 'Analyses',
+    icon: BarChart3,
+  },
+  {
+    href: '/dashboard/resumes',
+    label: 'Resumes',
+    icon: FileText,
+  },
+  {
+    href: '/dashboard/analyses/new',
+    label: 'New Analysis',
+    icon: PlusCircle,
+  },
+  {
+    href: '/dashboard/profile',
+    label: 'Profile',
+    icon: User,
+  },
+];
 
   const isActive = (href: string) => pathname === href;
 
