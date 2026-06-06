@@ -1,12 +1,7 @@
 from app.analysis.skill_analyzer import extract_skills
 from app.analysis.certificate_analyzer import extract_certifications
 import re
-from app.analysis.ats_rules import (
-    EDUCATION_KEYWORDS,
-    PROJECT_KEYWORDS,
-    EXPERIENCE_KEYWORDS,
-    SKILL_SECTION_KEYWORDS
-)
+
 
 def generate_ats_analysis(
     resume_text: str

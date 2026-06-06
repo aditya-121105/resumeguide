@@ -1,13 +1,63 @@
 'use client';
 
 import { DashboardLayout } from '@/components/dashboard-layout';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ResumeUploadModal } from '@/components/resume-upload-modal';
+import { getDashboardData } from '@/lib/dashboard-api';
 
 export default function DashboardPage() {
   const [isUploadModalOpen,
 setIsUploadModalOpen] =
 useState(false);
+  const [dashboardData,
+setDashboardData] =
+useState<any>(null);
+
+const [loading,
+setLoading] =
+useState(true);
+useEffect(() => {
+
+  const fetchDashboard = async () => {
+
+    try {
+
+      const data =
+        await getDashboardData();
+
+      setDashboardData(data);
+
+    } catch (error) {
+
+      console.error(
+        "Failed to load dashboard",
+        error
+      );
+
+    } finally {
+
+      setLoading(false);
+    }
+  };
+
+  fetchDashboard();
+
+}, []);
+  if (loading) {
+
+  return (
+
+    <DashboardLayout>
+
+      <div className="p-8">
+
+        Loading dashboard...
+
+      </div>
+
+    </DashboardLayout>
+  );
+}
   return (
     <DashboardLayout>
 
@@ -33,7 +83,7 @@ useState(false);
             </p>
 
             <h2 className="mt-2 text-3xl font-bold">
-              3
+              {dashboardData?.total_resumes ?? 0}
             </h2>
           </div>
 
@@ -43,7 +93,7 @@ useState(false);
             </p>
 
             <h2 className="mt-2 text-3xl font-bold">
-              12
+              {dashboardData?.total_analyses ?? 0}
             </h2>
           </div>
 
@@ -53,7 +103,7 @@ useState(false);
             </p>
 
             <h2 className="mt-2 text-3xl font-bold">
-              82%
+              {dashboardData?.average_score ?? 0}%
             </h2>
           </div>
 
@@ -63,7 +113,7 @@ useState(false);
             </p>
 
             <h2 className="mt-2 text-3xl font-bold">
-              91%
+              {dashboardData?.highest_score ?? 0}%
             </h2>
           </div>
 
