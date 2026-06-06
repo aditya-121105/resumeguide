@@ -7,6 +7,75 @@ from app.analysis.general_analysis import (
 )
 
 ROLE_SKILL_MAPPING = {
+"Frontend Developer": [
+    "html",
+    "css",
+    "javascript",
+    "react",
+    "typescript"
+],
+
+"Full Stack Developer": [
+    "html",
+    "css",
+    "javascript",
+    "react",
+    "python",
+    "flask",
+    "sql"
+],
+
+"Software Engineer": [
+    "python",
+    "java",
+    "sql",
+    "git",
+    "oop"
+],
+
+"Python Developer": [
+    "python",
+    "flask",
+    "fastapi",
+    "sql",
+    "api"
+],
+
+"Java Developer": [
+    "java",
+    "spring",
+    "sql",
+    "hibernate"
+],
+
+"Data Engineer": [
+    "python",
+    "sql",
+    "spark",
+    "etl"
+],
+
+"AI Engineer": [
+    "python",
+    "machine learning",
+    "deep learning",
+    "tensorflow",
+    "nlp"
+],
+
+"Mobile App Developer": [
+    "java",
+    "kotlin",
+    "android",
+    "firebase"
+],
+
+"Cybersecurity Engineer": [
+    "networking",
+    "linux",
+    "security",
+    "penetration testing"
+],
 "Backend Engineer": [
     "python",
     "fastapi",
