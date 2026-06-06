@@ -1,41 +1,199 @@
 'use client';
 
-import { Bell, Search, User } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import {
+  User,
+  ChevronDown,
+} from 'lucide-react';
+import {
+  Button,
+} from '@/components/ui/button';
+
+import {
+  useEffect,
+  useState,
+} from 'react';
+
 
 export function DashboardTopBar() {
+  const [user,
+  setUser] =
+  useState<any>(null);
+
+const [open,
+  setOpen] =
+  useState(false);
+   const handleLogout = () => {
+
+    localStorage.removeItem(
+      'access_token'
+    );
+
+    window.location.href =
+      '/';
+  };
+    useEffect(() => {
+
+  const fetchUser =
+    async () => {
+
+      try {
+
+        const token =
+          localStorage.getItem(
+            'access_token'
+          );
+
+        const response =
+          await fetch(
+            'http://127.0.0.1:8000/api/v1/auth/me',
+            {
+              headers: {
+                Authorization:
+                  `Bearer ${token}`,
+              },
+            }
+          );
+
+        const data =
+          await response.json();
+
+        setUser(data);
+
+      } catch (error) {
+
+        console.error(error);
+      }
+    };
+
+  fetchUser();
+
+}, []);
+
+
+
   return (
+
     <header className="border-b border-border bg-card">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
-        {/* Search Bar */}
-        <div className="flex-1 max-w-sm">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-foreground/40" />
-            <Input
-              type="search"
-              placeholder="Search skills, roles..."
-              className="pl-10 bg-background border-border focus:border-primary"
-            />
-          </div>
-        </div>
 
-        {/* Right Actions */}
-        <div className="ml-6 flex items-center gap-4">
-          {/* Notifications */}
-          <Button variant="ghost" size="icon" className="relative">
-            <Bell className="h-5 w-5" />
-            <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-primary"></span>
+      <div className="flex items-center justify-end px-6 py-4">
+
+        <div className="relative flex items-center gap-3">
+<Button
+            variant="outline"
+            onClick={handleLogout}
+          >
+            Logout
           </Button>
 
-          {/* Profile Menu */}
-          <Button variant="ghost" size="icon">
-            <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center">
-              <User className="h-4 w-4 text-primary" />
-            </div>
-          </Button>
-        </div>
+  <button
+    onClick={() =>
+      setOpen(
+        !open
+      )
+    }
+    className="
+      flex
+      items-center
+      gap-2
+      rounded-xl
+      border
+      px-3
+      py-2
+      transition
+      hover:bg-muted
+    "
+  >
+
+    <div
+      className="
+        flex
+        h-8
+        w-8
+        items-center
+        justify-center
+        rounded-full
+        bg-primary/15
+      "
+    >
+      <User
+        className="
+          h-4
+          w-4
+          text-primary
+        "
+      />
+    </div>
+
+    <ChevronDown
+      className="
+        h-4
+        w-4
+      "
+    />
+
+  </button>
+
+  {open && (
+
+    <div
+      className="
+        absolute
+        right-0
+        top-14
+        z-50
+        w-72
+        rounded-2xl
+        border
+        bg-card
+        p-4
+        shadow-lg
+      "
+    >
+
+      <div
+        className="
+          border-b
+          pb-3
+        "
+      >
+
+        <p
+          className="
+            font-semibold
+          "
+        >
+          {user?.full_name}
+        </p>
+
+        <p
+          className="
+            text-sm
+            text-muted-foreground
+          "
+        >
+          {user?.email}
+        </p>
+
       </div>
+
+      <div
+        className="
+          mt-3
+          space-y-2
+        "
+      >
+
+
+      </div>
+
+    </div>
+
+  )}
+
+</div>
+
+      </div>
+
     </header>
   );
 }

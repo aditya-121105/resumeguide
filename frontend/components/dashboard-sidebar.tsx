@@ -4,12 +4,9 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
   Home,
-  Settings,
-  LogOut,
   Menu,
   X,
   FileText,
-  User,
   PlusCircle,
   BarChart3,
 } from 'lucide-react';
@@ -41,19 +38,28 @@ const navItems = [
     label: 'New Analysis',
     icon: PlusCircle,
   },
-  {
-    href: '/dashboard/profile',
-    label: 'Profile',
-    icon: User,
-  },
 ];
-
   const isActive = (href: string) => pathname === href;
 
   return (
     <>
       {/* Desktop Sidebar */}
-      <aside className="hidden w-64 border-r border-border bg-card md:flex flex-col">
+      <aside
+  className="
+    fixed
+    left-0
+    top-0
+    hidden
+    h-screen
+    w-64
+    border-r
+    border-border
+    bg-card
+    md:flex
+    flex-col
+    z-30
+  "
+>
         {/* Logo */}
         <div className="border-b border-border px-6 py-6">
           <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary">
@@ -79,28 +85,7 @@ const navItems = [
           ))}
         </nav>
 
-        {/* Footer */}
-        <div className="border-t border-border px-3 py-4 space-y-2">
-          <Link
-            href="/dashboard/settings"
-            className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-              isActive('/dashboard/settings')
-                ? 'bg-primary/10 text-primary'
-                : 'text-foreground/70 hover:bg-background hover:text-foreground'
-            }`}
-          >
-            <Settings className="h-4 w-4" />
-            Settings
-          </Link>
-          <Button
-            variant="ghost"
-            className="w-full justify-start text-foreground/70 hover:text-foreground"
-            size="sm"
-          >
-            <LogOut className="mr-3 h-4 w-4" />
-            Sign Out
-          </Button>
-        </div>
+
       </aside>
 
       {/* Mobile Menu Button */}
@@ -136,24 +121,7 @@ const navItems = [
             ))}
           </nav>
 
-          <div className="border-t border-border px-3 py-4 space-y-2">
-            <Link
-              href="/dashboard/settings"
-              onClick={() => setIsOpen(false)}
-              className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors text-foreground/70 hover:bg-background hover:text-foreground"
-            >
-              <Settings className="h-4 w-4" />
-              Settings
-            </Link>
-            <Button
-              variant="ghost"
-              className="w-full justify-start text-foreground/70 hover:text-foreground"
-              size="sm"
-            >
-              <LogOut className="mr-3 h-4 w-4" />
-              Sign Out
-            </Button>
-          </div>
+
         </aside>
       )}
     </>
