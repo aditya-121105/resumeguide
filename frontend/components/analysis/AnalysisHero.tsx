@@ -1,17 +1,19 @@
 type AnalysisHeroProps = {
   title: string;
-  resumeName: string;
+  subtitle?: string;
   score: number;
   status: string;
   createdAt: string;
+  scoreLabel?: string;
 };
 
 export function AnalysisHero({
   title,
-  resumeName,
+ subtitle,
   score,
   status,
   createdAt,
+    scoreLabel
 }: AnalysisHeroProps) {
 
   const radius = 72;
@@ -98,27 +100,21 @@ const getProgressColor =
 
         <div>
 
-          <p
-            className="
-              text-sm
-              font-medium
-              text-blue-600
-            "
-          >
-            <div className="
-                inline-flex
-                items-center
-                rounded-full
-                bg-blue-100
-                px-3
-                py-1
-                text-xs
-                font-semibold
-                text-blue-700
-                ">
-                Resume Evaluation Report
-                </div>
-          </p>
+          <div
+  className="
+    inline-flex
+    items-center
+    rounded-full
+    bg-blue-100
+    px-3
+    py-1
+    text-xs
+    font-semibold
+    text-blue-700
+  "
+>
+  Resume Evaluation Report
+</div>
 
           <h1
             className="
@@ -129,15 +125,21 @@ const getProgressColor =
           >
             {title}
           </h1>
+            {subtitle && (
 
-          <p
-            className="
-              mt-3
-              text-muted-foreground
-            "
-          >
-            {resumeName}
-          </p>
+  <p
+    className="
+      mt-4
+      text-xl
+      text-muted-foreground
+    "
+  >
+    {subtitle}
+  </p>
+
+)}
+
+
 
           <div
             className="
@@ -242,7 +244,7 @@ const getProgressColor =
           ${getScoreColor()}
         `}
       >
-        {score}/100
+        {Math.round(score)}/100
       </span>
 
       <span
@@ -251,7 +253,7 @@ const getProgressColor =
           text-muted-foreground
         "
       >
-        ATS SCORE
+        {scoreLabel ?? 'ATS SCORE'}
       </span>
 
     </div>

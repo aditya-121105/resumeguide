@@ -3,6 +3,8 @@
 import { DashboardLayout } from '@/components/dashboard-layout';
 import { GeneralAnalysisView } from '@/components/analysis/GeneralAnalysisView';
 import { getAnalysisDetails } from '@/lib/analysis-api';
+import { RoleAnalysisView } from '@/components/analysis/RoleAnalysisView';
+import { JobDescriptionAnalysisView } from '@/components/analysis/JobDescriptionAnalysisView';
 
 import {
   useEffect,
@@ -95,13 +97,37 @@ export default function AnalysisDetailsPage() {
 
   return (
 
-    <DashboardLayout>
+  <DashboardLayout>
+
+    {analysis.analysis_type ===
+      'general' && (
 
       <GeneralAnalysisView
         analysis={analysis}
       />
 
-    </DashboardLayout>
+    )}
 
-  );
+    {analysis.analysis_type ===
+      'role' && (
+
+      <RoleAnalysisView
+        analysis={analysis}
+      />
+
+    )}
+
+    {analysis.analysis_type ===
+      'job_description' && (
+
+      <JobDescriptionAnalysisView
+        analysis={analysis}
+      />
+
+    )}
+
+  </DashboardLayout>
+
+);
+
 }
