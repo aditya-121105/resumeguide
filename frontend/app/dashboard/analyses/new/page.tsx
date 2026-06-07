@@ -1,5 +1,5 @@
 'use client';
-
+import api from "@/lib/api";
 import { useEffect, useState }
 from 'react';
 import { useRouter } from 'next/navigation';
@@ -12,6 +12,7 @@ interface Resume {
   file_name: string;
 }
 export default function NewAnalysisPage() {
+
 
   const [resumes,
     setResumes] =
@@ -87,34 +88,34 @@ const [isAnalyzing,
     if (!selectedResume) {
 
       alert(
-        'Please select a resume'
+          'Please select a resume'
       );
 
       return;
     }
 
     if (
-      analysisType === 'role'
-      &&
-      !targetRole
+        analysisType === 'role'
+        &&
+        !targetRole
     ) {
 
       alert(
-        'Please select a role'
+          'Please select a role'
       );
 
       return;
     }
 
     if (
-      analysisType ===
-      'job_description'
-      &&
-      !jobDescription.trim()
+        analysisType ===
+        'job_description'
+        &&
+        !jobDescription.trim()
     ) {
 
       alert(
-        'Please enter a job description'
+          'Please enter a job description'
       );
 
       return;
@@ -122,85 +123,45 @@ const [isAnalyzing,
 
     try {
 
-      setIsAnalyzing(
-        true
-      );
+  setIsAnalyzing(true);
 
-      const token =
-        localStorage.getItem(
-          'access_token'
-        );
+  const response =
+    await api.post(
+      '/analysis/create',
+      {
+        resume_id: Number(selectedResume),
+        analysis_type: analysisType,
 
-      const response =
-        await fetch(
-          'http://127.0.0.1:8000/api/v1/analysis/create',
-          {
-            method: 'POST',
+        target_role:
+          analysisType === 'role'
+            ? targetRole
+            : null,
 
-            headers: {
-
-              'Content-Type':
-                'application/json',
-
-              Authorization:
-                `Bearer ${token}`,
-            },
-
-            body:
-              JSON.stringify({
-
-                resume_id:
-                  Number(
-                    selectedResume
-                  ),
-
-                analysis_type:
-                  analysisType,
-
-                target_role:
-                  analysisType ===
-                  'role'
-                    ? targetRole
-                    : null,
-
-                job_description:
-                  analysisType ===
-                  'job_description'
-                    ? jobDescription
-                    : null,
-              }),
-          }
-        );
-
-      const data =
-        await response.json();
-
-      if (
-        !response.ok
-      ) {
-
-        throw new Error(
-          data.detail ||
-          'Analysis failed'
-        );
+        job_description:
+          analysisType === 'job_description'
+            ? jobDescription
+            : null,
       }
+    );
 
-      router.push(
-        `/dashboard/analyses/${data.analysis_id}`
-      );
+  const data = response.data;
 
-    } catch (error: any) {
+  router.push(
+    `/dashboard/analyses/${data.analysis_id}`
+  );
 
-      alert(
-        error.message
-      );
+} catch (error: any) {
 
-    } finally {
+  alert(
+    error.response?.data?.detail ||
+    error.message
+  );
 
-      setIsAnalyzing(
-        false
-      );
-    }
+} finally {
+
+  setIsAnalyzing(false);
+
+}
   };
 
   const fetchResumes =
@@ -208,28 +169,14 @@ const [isAnalyzing,
 
       try {
 
-        const token =
-          localStorage.getItem(
-            'access_token'
+            const response =
+            await api.get(
+              '/resume/my-resumes'
+            );
+
+          setResumes(
+            response.data
           );
-
-        const response =
-          await fetch(
-            'http://127.0.0.1:8000/api/v1/resume/my-resumes',
-            {
-              headers: {
-                Authorization:
-                  `Bearer ${token}`,
-              },
-            }
-          );
-
-        const data =
-          await response.json();
-
-        setResumes(
-          data
-        );
 
       } catch (error) {
 

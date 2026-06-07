@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Upload, X, CheckCircle2, AlertCircle, FileText } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import api from '@/lib/api';
 
 interface ResumeUploadModalProps {
   isOpen: boolean;
@@ -86,10 +87,7 @@ export function ResumeUploadModal({ isOpen, onClose }: ResumeUploadModalProps) {
     setIsUploading(true);
     setUploadStatus('idle');
 
-    const token =
-      localStorage.getItem(
-        "access_token"
-      );
+
 
     const formData =
       new FormData();
@@ -100,28 +98,13 @@ export function ResumeUploadModal({ isOpen, onClose }: ResumeUploadModalProps) {
     );
 
     const response =
-      await fetch(
-        "http://127.0.0.1:8000/api/v1/resume/upload",
-        {
-          method: "POST",
-          headers: {
-            Authorization:
-              `Bearer ${token}`,
-          },
-          body: formData,
-        }
-      );
+  await api.post(
+    '/resume/upload',
+    formData
+  );
 
-    const data =
-      await response.json();
-
-    if (!response.ok) {
-
-      throw new Error(
-        data.detail ||
-        "Upload failed"
-      );
-    }
+const data =
+  response.data;
 
     setUploadStatus(
       "success"
@@ -143,9 +126,10 @@ export function ResumeUploadModal({ isOpen, onClose }: ResumeUploadModalProps) {
       "error"
     );
 
-    setErrorMessage(
-      err.message
-    );
+setErrorMessage(
+  err.response?.data?.detail ||
+  err.message
+);
 
   } finally {
 

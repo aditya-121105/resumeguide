@@ -20,6 +20,22 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  backend:
+    build:
+      context: ./backend
+
+    container_name: resume_analyzer_backend
+
+    restart: always
+
+    env_file:
+      - .env.docker
+
+    ports:
+      - "8000:8000"
+
+    depends_on:
+      - postgres
 
 volumes:
   postgres_data:

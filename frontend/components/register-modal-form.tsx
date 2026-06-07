@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Lock, Mail, User, Chrome, Eye, EyeOff } from 'lucide-react';
 import { useAuthModal } from '@/contexts/auth-modal-context';
 import { useRouter } from 'next/navigation';
+import api from '@/lib/api';
 import {
   GoogleLogin
 } from "@react-oauth/google";
@@ -30,32 +31,23 @@ export function RegisterModalForm() {
   const [confirmPasswordError, setConfirmPasswordError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
+  const { close } =
+  useAuthModal();
   const handleVerifyOtp = async () => {
       setError("");
       try {
 
-        const response = await fetch(
-          "http://127.0.0.1:8000/api/v1/auth/verify-otp",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              email,
-              otp,
-            }),
-          }
-        );
+        const response =
+  await api.post(
+    '/auth/verify-otp',
+    {
+      email,
+      otp,
+    }
+  );
 
-        const data = await response.json();
-
-        if (!response.ok) {
-          throw new Error(
-            data.detail || data.message || "OTP verification failed"
-          );
-        }
+const data =
+  response.data;
 
         setSuccessMessage(
           "Email verified successfully! Redirecting to login..."
@@ -68,8 +60,11 @@ export function RegisterModalForm() {
       } catch (err: any) {
 
         setError(
-          err.message || "Invalid OTP"
-        );
+  err.response?.data?.detail ||
+  err.response?.data?.message ||
+  err.message ||
+  'Invalid OTP'
+);
       }
     };
   const calculatePasswordStrength = (pwd: string): { score: number; label: string; color: string } => {
@@ -212,36 +207,29 @@ if (
     setIsLoading(true);
 
 try {
-  const response = await fetch(
-    "http://127.0.0.1:8000/api/v1/auth/register",
+  const response =
+  await api.post(
+    '/auth/register',
     {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        full_name: fullName,
-        email: email,
-        username: username,
-        password: password,
-      }),
+      full_name: fullName,
+      email,
+      username,
+      password,
     }
   );
 
-  const data = await response.json();
-
-  if (!response.ok) {
-    throw new Error(
-      data.detail || data.message || "Failed to create account"
-    );
-  }
+const data =
+  response.data;
 
   setShowOtpForm(true);
   setError("");
 } catch (err: any) {
   setError(
-    err.message || "Failed to create account. Please try again."
-  );
+  err.response?.data?.detail ||
+  err.response?.data?.message ||
+  err.message ||
+  'Failed to create account'
+);
 } finally {
   setIsLoading(false);
 }
@@ -304,30 +292,17 @@ try {
 
     try {
 
-      const response = await fetch(
-        "http://127.0.0.1:8000/api/v1/auth/google",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type":
-              "application/json",
-          },
-          body: JSON.stringify({
-            id_token:
-              credentialResponse.credential,
-          }),
-        }
-      );
+      const response =
+  await api.post(
+    '/auth/google',
+    {
+      id_token:
+        credentialResponse.credential,
+    }
+  );
 
-      const data =
-        await response.json();
-
-      if (!response.ok) {
-        throw new Error(
-          data.detail ||
-          "Google login failed"
-        );
-      }
+const data =
+  response.data;
 
       localStorage.setItem(
         "access_token",
@@ -345,9 +320,11 @@ try {
     } catch (err: any) {
 
       setError(
-        err.message ||
-        "Google login failed"
-      );
+  err.response?.data?.detail ||
+  err.response?.data?.message ||
+  err.message ||
+  'Request failed'
+);
     }
   }}
 

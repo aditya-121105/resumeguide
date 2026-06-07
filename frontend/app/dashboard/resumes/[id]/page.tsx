@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-
+import api from '@/lib/api';
 import { useParams } from 'next/navigation';
 
 import Link from 'next/link';
@@ -103,65 +103,42 @@ export default function ResumeDetailPage() {
 
       try {
 
-        const token =
-          localStorage.getItem(
-            'access_token'
-          );
 
-        const [
-          resumeResponse,
-          historyResponse,
-        ] = await Promise.all([
-          fetch(
-            `http://127.0.0.1:8000/api/v1/resume/${resumeId}`,
-            {
-              headers: {
-                Authorization:
-                  `Bearer ${token}`,
-              },
-            }
-          ),
 
-          fetch(
-            'http://127.0.0.1:8000/api/v1/analysis/history',
-            {
-              headers: {
-                Authorization:
-                  `Bearer ${token}`,
-              },
-            }
-          ),
-        ]);
+            const [
+              resumeResponse,
+              historyResponse,
+            ] = await Promise.all([
+              api.get(
+                `/resume/${resumeId}`
+              ),
 
-        const resumeData =
-          await resumeResponse.json();
+              api.get(
+                '/analysis/history'
+              ),
+            ]);
 
-        const historyData =
-          await historyResponse.json();
+            const resumeData =
+              resumeResponse.data;
 
-        if (
-          !resumeResponse.ok ||
-          !historyResponse.ok
-        ) {
+            const historyData =
+              historyResponse.data;
 
-          throw new Error(
-            'Failed to load data'
-          );
-        }
+            setResume(
+              resumeData
+            );
 
-        setResume(
-          resumeData
-        );
-
-        setAnalyses(
-          historyData
-        );
+            setAnalyses(
+              historyData
+            );
 
       } catch (err: any) {
 
-        setError(
-          err.message
-        );
+  setError(
+    err.response?.data?.detail ||
+    err.message
+  );
+
 
       } finally {
 

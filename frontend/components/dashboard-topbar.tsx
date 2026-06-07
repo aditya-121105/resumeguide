@@ -12,6 +12,7 @@ import {
   useEffect,
   useState,
 } from 'react';
+import api from '@/lib/api';
 
 
 export function DashboardTopBar() {
@@ -38,31 +39,24 @@ const [open,
 
       try {
 
-        const token =
-          localStorage.getItem(
-            'access_token'
-          );
+
 
         const response =
-          await fetch(
-            'http://127.0.0.1:8000/api/v1/auth/me',
-            {
-              headers: {
-                Authorization:
-                  `Bearer ${token}`,
-              },
-            }
-          );
+  await api.get(
+    '/auth/me'
+  );
 
-        const data =
-          await response.json();
+setUser(
+  response.data
+);
 
-        setUser(data);
+      } catch (error: any) {
 
-      } catch (error) {
-
-        console.error(error);
-      }
+  console.error(
+    error.response?.data ||
+    error.message
+  );
+}
     };
 
   fetchUser();

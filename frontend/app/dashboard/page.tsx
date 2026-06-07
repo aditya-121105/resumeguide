@@ -211,17 +211,7 @@ const fetchUser = async () => {
         Upload Resume
       </button>
 
-      <button
-        className="
-          rounded-xl
-          border
-          px-5
-          py-3
-          font-medium
-        "
-      >
-        New Analysis
-      </button>
+
 
     </div>
 

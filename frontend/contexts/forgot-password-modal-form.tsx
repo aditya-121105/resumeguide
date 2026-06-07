@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useAuthModal } from '@/contexts/auth-modal-context';
+import api from '@/lib/api';
 
 export function ForgotPasswordModalForm() {
 
@@ -55,31 +56,17 @@ const [confirmPassword, setConfirmPassword] =
     try {
 
       const response =
-        await fetch(
-          "http://127.0.0.1:8000/api/v1/auth/reset-password",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type":
-                "application/json",
-            },
-            body: JSON.stringify({
-              email,
-              new_password:
-                newPassword,
-            }),
-          }
-        );
+  await api.post(
+    '/auth/reset-password',
+    {
+      email,
+      new_password:
+        newPassword,
+    }
+  );
 
-      const data =
-        await response.json();
-
-      if (!response.ok) {
-
-        throw new Error(
-          data.detail
-        );
-      }
+const data =
+  response.data;
 
       setSuccessMessage(
   "Password reset successfully! Redirecting to login..."
@@ -91,9 +78,10 @@ setTimeout(() => {
 
     } catch (err: any) {
 
-      setError(
-        err.message
-      );
+setError(
+  err.response?.data?.detail ||
+  err.message
+);
     }
   };
   const handleVerifyOtp =
@@ -102,38 +90,24 @@ setTimeout(() => {
     try {
 
       const response =
-        await fetch(
-          "http://127.0.0.1:8000/api/v1/auth/verify-reset-otp",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type":
-                "application/json",
-            },
-            body: JSON.stringify({
-              email,
-              otp,
-            }),
-          }
-        );
+  await api.post(
+    '/auth/verify-reset-otp',
+    {
+      email,
+      otp,
+    }
+  );
 
-      const data =
-        await response.json();
-
-      if (!response.ok) {
-
-        throw new Error(
-          data.detail
-        );
-      }
+const data =
+  response.data;
       console.log("OTP verified successfully");
       setShowResetScreen(true);
 
     } catch (err: any) {
-
-      setError(
-        err.message
-      );
+setError(
+  err.response?.data?.detail ||
+  err.message
+);
     }
   };
   const handleSendOtp =
@@ -146,30 +120,15 @@ setTimeout(() => {
         setIsLoading(true);
 
         const response =
-          await fetch(
-            "http://127.0.0.1:8000/api/v1/auth/forgot-password",
-            {
-              method: "POST",
-              headers: {
-                "Content-Type":
-                  "application/json",
-              },
-              body: JSON.stringify({
-                identifier,
-              }),
-            }
-          );
+  await api.post(
+    '/auth/forgot-password',
+    {
+      identifier,
+    }
+  );
 
-        const data =
-          await response.json();
-
-        if (!response.ok) {
-
-          throw new Error(
-            data.detail ||
-            "Failed to send OTP"
-          );
-        }
+const data =
+  response.data;
         setEmail(data.email);
 
         setShowOtpScreen(true);
@@ -180,8 +139,9 @@ setTimeout(() => {
       } catch (err: any) {
 
         setError(
-          err.message
-        );
+  err.response?.data?.detail ||
+  err.message
+);
 
       } finally {
 

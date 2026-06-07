@@ -1,6 +1,8 @@
 'use client';
 
+
 import { useState } from 'react';
+import api from '@/lib/api';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -86,25 +88,19 @@ const validateusername = (value: string) => {
           formData.append("username", username);
           formData.append("password", password);
 
-          const response = await fetch(
-            "http://127.0.0.1:8000/api/v1/auth/login",
-            {
-              method: "POST",
-              headers: {
-                "Content-Type":
-                  "application/x-www-form-urlencoded",
-              },
-              body: formData,
-            }
-          );
+          const response = await api.post(
+  '/auth/login',
+  formData,
+  {
+    headers: {
+      'Content-Type':
+        'application/x-www-form-urlencoded',
+    },
+  }
+);
 
-          const data = await response.json();
-
-          if (!response.ok) {
-            throw new Error(
-              data.detail || "Invalid credentials"
-            );
-          }
+const data =
+  response.data;
 
           localStorage.setItem(
             "access_token",
@@ -120,11 +116,14 @@ const validateusername = (value: string) => {
 
           router.push("/dashboard");
 
-        } catch (err: any) {
-          setError(
-            err.message || "Failed to sign in"
-          );
-        } finally {
+        }catch (err: any) {
+
+  setError(
+    err.response?.data?.detail ||
+    err.message ||
+    'Failed to sign in'
+  );
+} finally {
           setIsLoading(false);
         }
   };
@@ -151,30 +150,17 @@ const validateusername = (value: string) => {
 
       try {
 
-        const response = await fetch(
-          "http://127.0.0.1:8000/api/v1/auth/google",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type":
-                "application/json",
-            },
-            body: JSON.stringify({
-              id_token:
-                credentialResponse.credential,
-            }),
-          }
-        );
+        const response =
+  await api.post(
+    '/auth/google',
+    {
+      id_token:
+        credentialResponse.credential,
+    }
+  );
 
-        const data =
-          await response.json();
-
-        if (!response.ok) {
-          throw new Error(
-            data.detail ||
-            "Google login failed"
-          );
-        }
+const data =
+  response.data;
 
         localStorage.setItem(
           "access_token",
@@ -194,11 +180,13 @@ const validateusername = (value: string) => {
 
       } catch (err: any) {
 
-        setError(
-          err.message ||
-          "Google login failed"
-        );
-      }
+  setError(
+    err.response?.data?.detail ||
+    err.message ||
+    'Google login failed'
+  );
+}
+
     }}
 
     onError={() => {

@@ -13,6 +13,15 @@ ai/
 # Environment Variables
 .env
 frontend/.env.local
+.env.docker
+.env.*
+!.env.example
+
+.next/
+out/
+.pytest_cache/
+coverage/
+
 
 # Logs
 logs/

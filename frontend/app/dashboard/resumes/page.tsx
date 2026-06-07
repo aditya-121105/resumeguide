@@ -5,6 +5,8 @@ import { DashboardLayout } from '@/components/dashboard-layout';
 import Link from 'next/link';
 import { ResumeUploadModal }
 from '@/components/resume-upload-modal';
+import api from '@/lib/api';
+
 interface Resume {
   resume_id: number;
   file_name: string;
@@ -45,42 +47,25 @@ export default function ResumesPage() {
 
       try {
 
-        const token =
-          localStorage.getItem(
-            'access_token'
-          );
+
 
         const response =
-          await fetch(
-            'http://127.0.0.1:8000/api/v1/resume/my-resumes',
-            {
-              headers: {
-                Authorization:
-                  `Bearer ${token}`,
-              },
-            }
-          );
+  await api.get(
+    '/resume/my-resumes'
+  );
 
-        const data =
-          await response.json();
-
-        if (!response.ok) {
-
-          throw new Error(
-            data.detail ||
-            'Failed to load resumes'
-          );
-        }
-
-        setResumes(data);
+setResumes(
+  response.data
+);
 
       } catch (err: any) {
 
-        setError(
-          err.message
-        );
+  setError(
+    err.response?.data?.detail ||
+    err.message
+  );
 
-      } finally {
+} finally {
 
         setLoading(false);
       }
