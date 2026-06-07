@@ -224,12 +224,26 @@ const data =
   setShowOtpForm(true);
   setError("");
 } catch (err: any) {
-  setError(
-  err.response?.data?.detail ||
-  err.response?.data?.message ||
-  err.message ||
-  'Failed to create account'
-);
+
+  const message =
+    err.response?.data?.detail ||
+    err.response?.data?.message ||
+    err.message ||
+    'Failed to create account';
+
+  if (
+    message ===
+    "OTP already sent. Please verify your email."
+  ) {
+
+    setError("");
+    setShowOtpForm(true);
+
+    return;
+  }
+
+  setError(message);
+
 } finally {
   setIsLoading(false);
 }

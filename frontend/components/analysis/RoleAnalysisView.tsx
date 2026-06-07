@@ -9,6 +9,17 @@ import { RecommendedRolesChart } from './RecommendedRolesChart';
 interface Props {
   analysis: any;
 }
+function EmptyMessage({
+  text,
+}: {
+  text: string;
+}) {
+  return (
+    <p className="text-sm text-muted-foreground">
+      {text}
+    </p>
+  );
+}
 
 export function RoleAnalysisView({
   analysis,
@@ -234,27 +245,37 @@ export function RoleAnalysisView({
               "
             >
 
-              {roleData.matched_skills.map(
-                (
-                  skill: string
-                ) => (
+              {roleData?.matched_skills?.length ? (
 
-                  <span
-                    key={skill}
-                    className="
-                      rounded-full
-                      bg-green-100
-                      px-3
-                      py-1
-                      text-sm
-                      font-medium
-                      text-green-700
-                    "
-                  >
-                    ✓ {skill}
-                  </span>
+                roleData.matched_skills.map(
+                  (
+                    skill: string
+                  ) => (
 
+                    <span
+                      key={skill}
+                      className="
+                        rounded-full
+                        bg-green-100
+                        px-3
+                        py-1
+                        text-sm
+                        font-medium
+                        text-green-700
+                      "
+                    >
+                      ✓ {skill}
+                    </span>
+
+                  )
                 )
+
+              ) : (
+
+                <EmptyMessage
+                  text="No matched skills found"
+                />
+
               )}
 
             </div>
@@ -284,29 +305,38 @@ export function RoleAnalysisView({
               "
             >
 
-              {roleData.missing_skills.map(
-                (
-                  skill: string
-                ) => (
+              {roleData?.missing_skills?.length ? (
 
-                  <span
-                    key={skill}
-                    className="
-                      rounded-full
-                      bg-red-100
-                      px-3
-                      py-1
-                      text-sm
-                      font-medium
-                      text-red-700
-                    "
-                  >
-                    ✕ {skill}
-                  </span>
+                roleData.missing_skills.map(
+                  (
+                    skill: string
+                  ) => (
 
+                    <span
+                      key={skill}
+                      className="
+                        rounded-full
+                        bg-red-100
+                        px-3
+                        py-1
+                        text-sm
+                        font-medium
+                        text-red-700
+                      "
+                    >
+                      ✕ {skill}
+                    </span>
+
+                  )
                 )
-              )}
 
+              ) : (
+
+                <EmptyMessage
+                  text="No missing skills identified"
+                />
+
+              )}
             </div>
 
           </div>
@@ -380,7 +410,9 @@ export function RoleAnalysisView({
               "
             >
 
-              {roleData.role_summary.strengths.map(
+              {roleData?.role_summary?.strengths?.length ? (
+
+              roleData.role_summary.strengths.map(
                 (
                   item: string,
                   index: number
@@ -405,7 +437,15 @@ export function RoleAnalysisView({
                   </div>
 
                 )
-              )}
+              )
+
+            ) : (
+
+              <EmptyMessage
+                text="No strengths available"
+              />
+
+            )}
 
             </div>
 
@@ -440,7 +480,9 @@ export function RoleAnalysisView({
               "
             >
 
-              {roleData.role_summary.weaknesses.map(
+              {roleData?.role_summary?.weaknesses?.length ? (
+
+              roleData.role_summary.weaknesses.map(
                 (
                   item: string,
                   index: number
@@ -465,7 +507,15 @@ export function RoleAnalysisView({
                   </div>
 
                 )
-              )}
+              )
+
+            ) : (
+
+              <EmptyMessage
+                text="No weaknesses available"
+              />
+
+            )}
 
             </div>
 
@@ -500,31 +550,41 @@ export function RoleAnalysisView({
               "
             >
 
-              {roleData.role_summary.next_steps.map(
-                (
-                  item: string,
-                  index: number
-                ) => (
+                {roleData?.role_summary?.next_steps?.length ? (
 
-                  <div
-                    key={index}
-                    className="
-                      flex
-                      gap-3
-                    "
-                  >
+                roleData.role_summary.next_steps.map(
+                  (
+                    item: string,
+                    index: number
+                  ) => (
 
-                    <span className="text-blue-600">
-                      →
-                    </span>
+                    <div
+                      key={index}
+                      className="
+                        flex
+                        gap-3
+                      "
+                    >
 
-                    <span className="text-sm">
-                      {item}
-                    </span>
+                      <span className="text-blue-600">
+                        →
+                      </span>
 
-                  </div>
+                      <span className="text-sm">
+                        {item}
+                      </span>
 
+                    </div>
+
+                  )
                 )
+
+              ) : (
+
+                <EmptyMessage
+                  text="No next steps available"
+                />
+
               )}
 
             </div>
@@ -570,14 +630,78 @@ export function RoleAnalysisView({
           "
         >
 
-          {roleData.skill_gaps.map(
-            (
-              gap: any,
-              index: number
-            ) => (
+          {roleData?.skill_gaps?.length ? (
+
+              roleData.skill_gaps.map(
+                (
+                  gap: any,
+                  index: number
+                ) => (
+
+                  <div
+                    key={index}
+                    className="
+                      rounded-3xl
+                      border
+                      bg-white
+                      p-6
+                      shadow-sm
+                    "
+                  >
+
+                    <div
+                      className="
+                        flex
+                        items-center
+                        justify-between
+                      "
+                    >
+
+                      <h3
+                        className="
+                          text-xl
+                          font-semibold
+                        "
+                      >
+                        {gap.skill}
+                      </h3>
+
+                      <span
+                        className="
+                          rounded-full
+                          bg-red-100
+                          px-3
+                          py-1
+                          text-xs
+                          font-medium
+                          text-red-700
+                        "
+                      >
+                        {gap.priority}
+                        {' '}
+                        Priority
+                      </span>
+
+                    </div>
+
+                    <p
+                      className="
+                        mt-4
+                        text-sm
+                        text-muted-foreground
+                      "
+                    >
+                      {gap.why_it_matters}
+                    </p>
+
+                  </div>
+
+                )
+              )
+
+            ) : (
 
               <div
-                key={index}
                 className="
                   rounded-3xl
                   border
@@ -586,57 +710,12 @@ export function RoleAnalysisView({
                   shadow-sm
                 "
               >
-
-                <div
-                  className="
-                    flex
-                    items-center
-                    justify-between
-                  "
-                >
-
-                  <h3
-                    className="
-                      text-xl
-                      font-semibold
-                    "
-                  >
-                    {gap.skill}
-                  </h3>
-
-                  <span
-                    className="
-                      rounded-full
-                      bg-red-100
-                      px-3
-                      py-1
-                      text-xs
-                      font-medium
-                      text-red-700
-                    "
-                  >
-                    {gap.priority}
-                    {' '}
-                    Priority
-                  </span>
-
-                </div>
-
-                <p
-                  className="
-                    mt-4
-                    text-sm
-                    text-muted-foreground
-                  "
-                >
-                  {gap.why_it_matters}
-                </p>
-
+                <EmptyMessage
+                  text="No skill gaps identified"
+                />
               </div>
 
-            )
-          )}
-
+            )}
         </div>
 
       </div>
@@ -680,95 +759,101 @@ export function RoleAnalysisView({
 
           <div className="space-y-8">
 
-            {roleData.roadmap.map(
-              (
-                item: any,
-                index: number
-              ) => (
+            {roleData?.roadmap?.length ? (
 
-                <div
-                  key={item.step}
-                  className="
-                    flex
-                    gap-5
-                  "
-                >
-
-                  {/* Step Number */}
+              roleData.roadmap.map(
+                (
+                  item: any,
+                  index: number
+                ) => (
 
                   <div
+                    key={item.step}
                     className="
                       flex
-                      flex-col
-                      items-center
+                      gap-5
                     "
                   >
+
+                    {/* Step Number */}
 
                     <div
                       className="
                         flex
-                        h-10
-                        w-10
+                        flex-col
                         items-center
-                        justify-center
-                        rounded-full
-                        bg-blue-600
-                        text-sm
-                        font-bold
-                        text-white
                       "
                     >
-                      {item.step}
-                    </div>
-
-                    {index !==
-                      roleData.roadmap.length -
-                        1 && (
 
                       <div
                         className="
-                          mt-2
-                          h-16
-                          w-[2px]
-                          bg-blue-200
+                          flex
+                          h-10
+                          w-10
+                          items-center
+                          justify-center
+                          rounded-full
+                          bg-blue-600
+                          text-sm
+                          font-bold
+                          text-white
                         "
-                      />
+                      >
+                        {item.step}
+                      </div>
 
-                    )}
+                      {index !==
+                        roleData.roadmap.length - 1 && (
+
+                        <div
+                          className="
+                            mt-2
+                            h-16
+                            w-[2px]
+                            bg-blue-200
+                          "
+                        />
+
+                      )}
+
+                    </div>
+
+                    {/* Content */}
+
+                    <div className="pt-1">
+
+                      <h3
+                        className="
+                          font-semibold
+                        "
+                      >
+                        Step {item.step}
+                      </h3>
+
+                      <p
+                        className="
+                          mt-1
+                          text-sm
+                          text-muted-foreground
+                        "
+                      >
+                        {item.description}
+                      </p>
+
+                    </div>
 
                   </div>
 
-                  {/* Content */}
-
-                  <div className="pt-1">
-
-                    <h3
-                      className="
-                        font-semibold
-                      "
-                    >
-                      Step {item.step}
-                    </h3>
-
-                    <p
-                      className="
-                        mt-1
-                        text-sm
-                        text-muted-foreground
-                      "
-                    >
-                      {
-                        item.description
-                      }
-                    </p>
-
-                  </div>
-
-                </div>
-
+                )
               )
-            )}
 
+            ) : (
+
+              <EmptyMessage
+                text="No learning roadmap available"
+              />
+
+            )}
           </div>
 
         </div>
@@ -823,33 +908,51 @@ export function RoleAnalysisView({
             "
           >
 
-            {roleData.recommended_projects.map(
-              (
-                project: string,
-                index: number
-              ) => (
+            {roleData?.recommended_projects?.length ? (
 
-                <div
-                  key={index}
-                  className="
-                    rounded-2xl
-                    border
-                    p-4
-                  "
-                >
+  roleData.recommended_projects.map(
+    (
+      project: string,
+      index: number
+    ) => (
 
-                  <h3
-                    className="
-                      font-medium
-                    "
-                  >
-                    {project}
-                  </h3>
+      <div
+        key={index}
+        className="
+          rounded-2xl
+          border
+          p-4
+        "
+      >
 
-                </div>
+        <h3
+          className="
+            font-medium
+          "
+        >
+          {project}
+        </h3>
 
-              )
-            )}
+      </div>
+
+    )
+  )
+
+) : (
+
+  <div
+    className="
+      rounded-2xl
+      border
+      p-4
+    "
+  >
+    <EmptyMessage
+      text="No project recommendations available"
+    />
+  </div>
+
+)}
 
           </div>
 
@@ -896,7 +999,9 @@ export function RoleAnalysisView({
             "
           >
 
-            {roleData.recommended_certifications.map(
+            {roleData?.recommended_certifications?.length ? (
+
+            roleData.recommended_certifications.map(
               (
                 cert: string,
                 index: number
@@ -918,7 +1023,17 @@ export function RoleAnalysisView({
                 </span>
 
               )
-            )}
+            )
+
+          ) : (
+
+            <div className="w-full">
+              <EmptyMessage
+                text="No certification recommendations available"
+              />
+            </div>
+
+          )}
 
           </div>
 

@@ -35,9 +35,19 @@ def register_user(
     ).first()
 
     if existing_pending:
-        raise ValueError(
-            "OTP already sent. Please verify your email."
-        )
+
+        # Auto-delete expired OTP records
+        if existing_pending.expires_at < datetime.utcnow():
+
+            db.delete(existing_pending)
+            db.commit()
+
+        else:
+
+            raise HTTPException(
+                status_code=400,
+                detail="OTP already sent. Please verify your email."
+            )
     otp = generate_otp()
 
     pending_user = PendingRegistration(
@@ -88,9 +98,12 @@ def verify_otp(
             detail="Invalid OTP"
         )
     if pending_user.expires_at < datetime.utcnow():
+        db.delete(pending_user)
+        db.commit()
+
         raise HTTPException(
             status_code=400,
-            detail="OTP has expired"
+            detail="OTP has expired. Please register again."
         )
     db_user = User(
         full_name=pending_user.full_name,

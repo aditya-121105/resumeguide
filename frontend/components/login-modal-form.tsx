@@ -39,6 +39,12 @@ const validateusername = (value: string) => {
   setusernameError('');
   return true;
 };
+// lib/api.ts
+
+console.log(
+  "API INSTANCE CREATED",
+  process.env.NEXT_PUBLIC_API_URL
+);
 
   const validatePassword = (value: string) => {
     if (!value) {

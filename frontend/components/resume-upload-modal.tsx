@@ -126,10 +126,7 @@ const data =
       "error"
     );
 
-setErrorMessage(
-  err.response?.data?.detail ||
-  err.message
-);
+
 
   } finally {
 

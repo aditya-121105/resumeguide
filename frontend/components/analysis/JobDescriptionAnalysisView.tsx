@@ -5,6 +5,17 @@ import { ATSBreakdownChart } from './ATSBreakdownChart';
 import { CategoryCard } from './CategoryCard';
 import { RecommendedRolesChart } from './RecommendedRolesChart';
 
+function EmptyMessage({
+  text,
+}: {
+  text: string;
+}) {
+  return (
+    <p className="text-sm text-muted-foreground">
+      {text}
+    </p>
+  );
+}
 export function JobDescriptionAnalysisView({
   analysis,
 }: {
@@ -168,28 +179,38 @@ export function JobDescriptionAnalysisView({
 
               <div className="flex flex-wrap gap-2">
 
-                {jdData?.matched_skills?.map(
-                    (skill: string) => (
+                    {jdData?.matched_skills?.length ? (
 
-                        <span
+                      jdData.matched_skills.map(
+                        (skill: string) => (
+
+                          <span
                             key={skill}
                             className="
-                rounded-full
-                bg-green-100
-                px-3
-                py-1
-                text-sm
-                font-medium
-                text-green-700
-              "
-                        >
-              ✓ {skill}
-            </span>
+                              rounded-full
+                              bg-green-100
+                              px-3
+                              py-1
+                              text-sm
+                              font-medium
+                              text-green-700
+                            "
+                          >
+                            ✓ {skill}
+                          </span>
 
-                    )
-                )}
+                        )
+                      )
 
-              </div>
+                    ) : (
+
+                      <EmptyMessage
+                        text="No matched skills found"
+                      />
+
+                    )}
+
+                  </div>
 
             </div>
 
@@ -203,26 +224,36 @@ export function JobDescriptionAnalysisView({
 
               <div className="flex flex-wrap gap-2">
 
-                {jdData?.missing_skills?.map(
-                    (skill: string) => (
+                {jdData?.missing_skills?.length ? (
+
+                    jdData.missing_skills.map(
+                      (skill: string) => (
 
                         <span
-                            key={skill}
-                            className="
-                rounded-full
-                bg-red-100
-                px-3
-                py-1
-                text-sm
-                font-medium
-                text-red-700
-              "
+                          key={skill}
+                          className="
+                            rounded-full
+                            bg-red-100
+                            px-3
+                            py-1
+                            text-sm
+                            font-medium
+                            text-red-700
+                          "
                         >
-              ✕ {skill}
-            </span>
+                          ✕ {skill}
+                        </span>
 
+                      )
                     )
-                )}
+
+                  ) : (
+
+                    <EmptyMessage
+                      text="No missing skills identified"
+                    />
+
+                  )}
 
               </div>
 
@@ -249,53 +280,73 @@ export function JobDescriptionAnalysisView({
 
           <div className="grid gap-6 lg:grid-cols-2">
 
-            {jdData?.skill_gaps?.map(
-                (
-                    gap: any,
-                    index: number
-                ) => (
+            {jdData?.skill_gaps?.length ? (
 
-                    <div
-                        key={index}
-                        className="
-            rounded-3xl
-            border
-            bg-white
-            p-6
-            shadow-sm
-          "
-                    >
+  jdData.skill_gaps.map(
+    (
+      gap: any,
+      index: number
+    ) => (
 
-                      <div className="flex items-center justify-between">
+      <div
+        key={index}
+        className="
+          rounded-3xl
+          border
+          bg-white
+          p-6
+          shadow-sm
+        "
+      >
 
-                        <h3 className="text-xl font-semibold">
-                          {gap.skill}
-                        </h3>
+        <div className="flex items-center justify-between">
 
-                        <span
-                            className="
-                rounded-full
-                bg-red-100
-                px-3
-                py-1
-                text-xs
-                font-medium
-                text-red-700
-              "
-                        >
-              {gap.priority} Priority
-            </span>
+          <h3 className="text-xl font-semibold">
+            {gap.skill}
+          </h3>
 
-                      </div>
+          <span
+            className="
+              rounded-full
+              bg-red-100
+              px-3
+              py-1
+              text-xs
+              font-medium
+              text-red-700
+            "
+          >
+            {gap.priority} Priority
+          </span>
 
-                      <p className="mt-4 text-sm text-muted-foreground">
-                        {gap.why_it_matters}
-                      </p>
+        </div>
 
-                    </div>
+        <p className="mt-4 text-sm text-muted-foreground">
+          {gap.why_it_matters}
+        </p>
 
-                )
-            )}
+      </div>
+
+            )
+          )
+
+        ) : (
+
+          <div
+            className="
+              rounded-3xl
+              border
+              bg-white
+              p-6
+              shadow-sm
+            "
+          >
+            <EmptyMessage
+              text="No skill gaps identified"
+            />
+          </div>
+
+        )}
 
           </div>
 
@@ -329,28 +380,28 @@ export function JobDescriptionAnalysisView({
               <div className="mt-4 space-y-3">
 
                 {jdData?.summary?.strengths?.map(
-                    (
-                        item: string,
-                        index: number
-                    ) => (
+                (
+                  item: string,
+                  index: number
+                ) => (
 
-                        <div
-                            key={index}
-                            className="flex gap-3"
-                        >
+                  <div
+                    key={index}
+                    className="flex gap-3"
+                  >
 
-              <span className="text-green-600">
-                ✓
-              </span>
+                    <span className="text-green-600">
+                      ✓
+                    </span>
 
-                          <span className="text-sm">
-                {item}
-              </span>
+                    <span className="text-sm">
+                      {item}
+                    </span>
 
-                        </div>
+                  </div>
 
-                    )
-                )}
+                )
+              )}
 
               </div>
 
@@ -366,28 +417,38 @@ export function JobDescriptionAnalysisView({
 
               <div className="mt-4 space-y-3">
 
-                {jdData?.summary?.weaknesses?.map(
+                {jdData?.summary?.weaknesses?.length ? (
+
+                  jdData.summary.weaknesses.map(
                     (
-                        item: string,
-                        index: number
+                      item: string,
+                      index: number
                     ) => (
 
-                        <div
-                            key={index}
-                            className="flex gap-3"
-                        >
+                      <div
+                        key={index}
+                        className="flex gap-3"
+                      >
 
-              <span className="text-red-600">
-                ✕
-              </span>
+                        <span className="text-red-600">
+                          ✕
+                        </span>
 
-                          <span className="text-sm">
-                {item}
-              </span>
+                        <span className="text-sm">
+                          {item}
+                        </span>
 
-                        </div>
+                      </div>
 
                     )
+                  )
+
+                ) : (
+
+                  <EmptyMessage
+                    text="No weaknesses available"
+                  />
+
                 )}
 
               </div>
@@ -404,28 +465,38 @@ export function JobDescriptionAnalysisView({
 
               <div className="mt-4 space-y-3">
 
-                {jdData?.summary?.next_steps?.map(
+                {jdData?.summary?.next_steps?.length ? (
+
+                  jdData.summary.next_steps.map(
                     (
-                        item: string,
-                        index: number
+                      item: string,
+                      index: number
                     ) => (
 
-                        <div
-                            key={index}
-                            className="flex gap-3"
-                        >
+                      <div
+                        key={index}
+                        className="flex gap-3"
+                      >
 
-              <span className="text-blue-600">
-                →
-              </span>
+                        <span className="text-blue-600">
+                          →
+                        </span>
 
-                          <span className="text-sm">
-                {item}
-              </span>
+                        <span className="text-sm">
+                          {item}
+                        </span>
 
-                        </div>
+                      </div>
 
                     )
+                  )
+
+                ) : (
+
+                  <EmptyMessage
+                    text="No next steps available"
+                  />
+
                 )}
 
               </div>
@@ -453,52 +524,72 @@ export function JobDescriptionAnalysisView({
 
           <div className="grid gap-6 lg:grid-cols-2">
 
-            {jdData?.improvement_plan?.map(
+            {jdData?.improvement_plan?.length ? (
+
+              jdData.improvement_plan.map(
                 (
-                    item: any,
-                    index: number
+                  item: any,
+                  index: number
                 ) => (
 
-                    <div
-                        key={index}
+                  <div
+                    key={index}
+                    className="
+                      rounded-3xl
+                      border
+                      bg-white
+                      p-6
+                      shadow-sm
+                    "
+                  >
+
+                    <div className="flex items-center justify-between">
+
+                      <h3 className="text-lg font-semibold">
+                        {item.skill}
+                      </h3>
+
+                      <span
                         className="
-            rounded-3xl
-            border
-            bg-white
-            p-6
-            shadow-sm
-          "
-                    >
-
-                      <div className="flex items-center justify-between">
-
-                        <h3 className="text-lg font-semibold">
-                          {item.skill}
-                        </h3>
-
-                        <span
-                            className="
-                rounded-full
-                bg-blue-100
-                px-3
-                py-1
-                text-xs
-                font-medium
-                text-blue-700
-              "
-                        >
-              {item.priority}
-            </span>
-
-                      </div>
-
-                      <p className="mt-4 text-sm text-muted-foreground">
-                        {item.action}
-                      </p>
+                          rounded-full
+                          bg-blue-100
+                          px-3
+                          py-1
+                          text-xs
+                          font-medium
+                          text-blue-700
+                        "
+                      >
+                        {item.priority}
+                      </span>
 
                     </div>
 
+                    <p className="mt-4 text-sm text-muted-foreground">
+                      {item.action}
+                    </p>
+
+                  </div>
+
                 )
+              )
+
+            ) : (
+
+              <div
+                className="
+                  rounded-3xl
+                  border
+                  bg-white
+                  p-6
+                  shadow-sm
+                "
+              >
+                <EmptyMessage
+                  text="No improvement plan available"
+                />
+              </div>
+
             )}
 
           </div>
@@ -532,74 +623,84 @@ export function JobDescriptionAnalysisView({
 
             <div className="space-y-8">
 
-              {jdData?.roadmap?.map(
-                  (
-                      item: any,
-                      index: number
-                  ) => (
+              {jdData?.roadmap?.length ? (
 
-                      <div
-                          key={item.step}
-                          className="flex gap-5"
-                      >
+                    jdData.roadmap.map(
+                      (
+                        item: any,
+                        index: number
+                      ) => (
 
                         <div
-                            className="
-                flex
-                flex-col
-                items-center
-              "
+                          key={item.step}
+                          className="flex gap-5"
                         >
 
                           <div
-                              className="
-                  flex
-                  h-10
-                  w-10
-                  items-center
-                  justify-center
-                  rounded-full
-                  bg-blue-600
-                  text-sm
-                  font-bold
-                  text-white
-                "
+                            className="
+                              flex
+                              flex-col
+                              items-center
+                            "
                           >
-                            {item.step}
-                          </div>
 
-                          {index !==
+                            <div
+                              className="
+                                flex
+                                h-10
+                                w-10
+                                items-center
+                                justify-center
+                                rounded-full
+                                bg-blue-600
+                                text-sm
+                                font-bold
+                                text-white
+                              "
+                            >
+                              {item.step}
+                            </div>
+
+                            {index !==
                               jdData.roadmap.length - 1 && (
 
-                                  <div
-                                      className="
-                    mt-2
-                    h-16
-                    w-[2px]
-                    bg-blue-200
-                  "
-                                  />
+                              <div
+                                className="
+                                  mt-2
+                                  h-16
+                                  w-[2px]
+                                  bg-blue-200
+                                "
+                              />
 
-                              )}
+                            )}
+
+                          </div>
+
+                          <div className="pt-1">
+
+                            <h3 className="font-semibold">
+                              Step {item.step}
+                            </h3>
+
+                            <p className="mt-1 text-sm text-muted-foreground">
+                              {item.description}
+                            </p>
+
+                          </div>
 
                         </div>
 
-                        <div className="pt-1">
+                      )
+                    )
 
-                          <h3 className="font-semibold">
-                            Step {item.step}
-                          </h3>
+                  ) : (
 
-                          <p className="mt-1 text-sm text-muted-foreground">
-                            {item.description}
-                          </p>
+                    <EmptyMessage
+                      text="No learning roadmap available"
+                    />
 
-                        </div>
-
-                      </div>
-
-                  )
-              )}
+                  )}
 
             </div>
 
@@ -634,26 +735,43 @@ export function JobDescriptionAnalysisView({
 
             <div className="mt-6 space-y-4">
 
-              {jdData?.recommended_projects?.map(
-                  (
-                      project: string,
-                      index: number
-                  ) => (
+              {jdData?.recommended_projects?.length ? (
 
-                      <div
-                          key={index}
-                          className="
-              rounded-2xl
-              border
-              p-4
-            "
-                      >
-                        {project}
-                      </div>
+              jdData.recommended_projects.map(
+                (
+                  project: string,
+                  index: number
+                ) => (
 
-                  )
-              )}
+                  <div
+                    key={index}
+                    className="
+                      rounded-2xl
+                      border
+                      p-4
+                    "
+                  >
+                    {project}
+                  </div>
 
+                )
+              )
+
+            ) : (
+
+              <div
+                className="
+                  rounded-2xl
+                  border
+                  p-4
+                "
+              >
+                <EmptyMessage
+                  text="No project recommendations available"
+                />
+              </div>
+
+            )}
             </div>
 
           </div>
@@ -683,29 +801,41 @@ export function JobDescriptionAnalysisView({
       "
             >
 
-              {jdData?.recommended_certifications?.map(
-                  (
-                      cert: string,
-                      index: number
-                  ) => (
+              {jdData?.recommended_certifications?.length ? (
 
-                      <span
-                          key={index}
-                          className="
-              rounded-full
-              bg-blue-100
-              px-4
-              py-2
-              text-sm
-              font-medium
-              text-blue-700
-            "
-                      >
-            {cert}
-          </span>
+              jdData.recommended_certifications.map(
+                (
+                  cert: string,
+                  index: number
+                ) => (
 
-                  )
-              )}
+                  <span
+                    key={index}
+                    className="
+                      rounded-full
+                      bg-blue-100
+                      px-4
+                      py-2
+                      text-sm
+                      font-medium
+                      text-blue-700
+                    "
+                  >
+                    {cert}
+                  </span>
+
+                )
+              )
+
+            ) : (
+
+              <div className="w-full">
+                <EmptyMessage
+                  text="No certification recommendations available"
+                />
+              </div>
+
+            )}
 
             </div>
 
