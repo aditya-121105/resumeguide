@@ -5,7 +5,7 @@ services:
   postgres:
     image: postgres:16
 
-    container_name: resume_analyzer_postgres
+    container_name: resumeguide_postgres
 
     restart: always
 
@@ -18,13 +18,13 @@ services:
       - "5432:5432"
 
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+        - resumeguide_postgres_data:/var/lib/postgresql/data
 
   backend:
     build:
       context: ./backend
 
-    container_name: resume_analyzer_backend
+    container_name: resumeguide_backend
 
     restart: always
 
@@ -43,7 +43,7 @@ services:
         NEXT_PUBLIC_API_URL: http://localhost:8000/api/v1
         NEXT_PUBLIC_GOOGLE_CLIENT_ID: 262231660312-iuf5hh93pfrb3l2c4oggr3rsf48n6j6d.apps.googleusercontent.com
 
-    container_name: resume_analyzer_frontend
+    container_name: resumeguide_frontend
 
     restart: always
 
@@ -54,4 +54,4 @@ services:
       - backend
 
 volumes:
-  postgres_data:
+  resumeguide_postgres_data:

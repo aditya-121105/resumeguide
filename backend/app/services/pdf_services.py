@@ -1,13 +1,16 @@
+from io import BytesIO
 import pdfplumber
 
 
 def extract_text_from_pdf(
-    file_path: str
+    pdf_bytes: bytes
 ):
 
     extracted_text = ""
 
-    with pdfplumber.open(file_path) as pdf:
+    with pdfplumber.open(
+        BytesIO(pdf_bytes)
+    ) as pdf:
 
         for page in pdf.pages:
 
@@ -15,6 +18,8 @@ def extract_text_from_pdf(
 
             if text:
 
-                extracted_text += text + "\n"
+                extracted_text += (
+                    text + "\n"
+                )
 
     return extracted_text

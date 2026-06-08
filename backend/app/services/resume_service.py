@@ -1,9 +1,12 @@
-import os
-import shutil
 import uuid
 from fastapi import (
     UploadFile,
     HTTPException
+)
+from io import BytesIO
+
+from app.services.s3_service import (
+    upload_file_to_s3
 )
 
 
@@ -33,37 +36,30 @@ def upload_resume_service(
             detail="Only PDF files allowed"
         )
 
-    upload_dir = "uploads/resumes"
-
-    os.makedirs(
-        upload_dir,
-        exist_ok=True
-    )
-
     unique_filename = (
         f"{uuid.uuid4()}_{file.filename}"
     )
 
-    file_path = (
-        f"{upload_dir}/{unique_filename}"
+    s3_key = (
+        f"resumes/{current_user.id}/{unique_filename}"
     )
 
-    with open(file_path, "wb") as buffer:
-
-        shutil.copyfileobj(
-            file.file,
-            buffer
-        )
+    pdf_bytes = file.file.read()
 
     resume_text = extract_text_from_pdf(
-        file_path
+        pdf_bytes
+    )
+
+    upload_file_to_s3(
+        BytesIO(pdf_bytes),
+        s3_key
     )
 
     resume = Resume(
 
         file_name=file.filename,
 
-        file_path=file_path,
+        file_path=s3_key,
 
         resume_text=resume_text,
 
