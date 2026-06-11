@@ -1,83 +1,158 @@
-# ResumeGuide 🚀
+# ResumeGuide
 
-**AI-Powered Career Intelligence Platform**
-
-ResumeGuide helps job seekers analyze resumes, compare them against job descriptions, identify skill gaps, improve ATS performance, and receive personalized career recommendations.
-
-The project is built as a cloud-native full-stack application using FastAPI, Next.js, PostgreSQL, Docker, AWS ECS, ECR, Auto Scaling Groups, and GitHub Actions CI/CD.
+AI-powered Resume Analysis Platform that helps job seekers evaluate resumes against job descriptions, identify skill gaps, improve ATS compatibility, and receive personalized learning recommendations.
 
 ---
 
-# ✨ Features
+## Demo
 
-## Authentication & Security
+![ATS Analysis Demo](docs/images/ats-analysis-demo.gif)
 
-* User Registration
-* Email OTP Verification
-* Login & Logout
-* JWT Authentication
-* Password Reset via OTP
-* Google OAuth Login (works in local development; deployment requires a valid public domain for Google OAuth redirect configuration)
+---
 
-## Resume Management
+## Features
 
-* Upload PDF Resumes
-* Store Files in Amazon S3
-* View Resume History
-* Manage Multiple Resumes
-* Resume Metadata Tracking
+### Resume Management
 
-## ATS Analysis
+* Upload and manage multiple resumes
+* Secure resume storage using Amazon S3
+* Resume history and tracking
 
-* Resume Parsing
-* ATS Score Generation
-* Strength Analysis
-* Weakness Detection
-* Resume Improvement Suggestions
+### ATS Analysis
 
-## Career Intelligence
+* ATS score calculation
+* Keyword matching analysis
+* Skill gap identification
+* Resume quality assessment
+* Missing skills detection
 
-* Job Description Matching
-* Skill Gap Identification
-* Career Recommendations
-* Personalized Insights
+### Career Guidance
+
+* Personalized learning roadmap
+* Project recommendations
+* Certification recommendations
+* Career improvement suggestions
+
+### Authentication & Security
+
+* JWT-based authentication
+* Google OAuth login
+* Password reset via OTP
+* Protected API endpoints
+
+### Cloud & DevOps
+
+* Dockerized application
+* CI/CD with GitHub Actions
+* Container registry using Amazon ECR
+* Deployment using Amazon ECS (EC2 Launch Type)
+* PostgreSQL database hosted on a dedicated EC2 instance
+* Resume storage using Amazon S3
+
+---
+
+# Architecture
+
+## 1. User Request Flow
+
+![User Flow](docs/architecture/user-flow.png)
+
+This diagram illustrates how users interact with the application and how requests travel through the system.
+
+---
+
+## 2. CI/CD Pipeline
+
+![CI/CD Pipeline](docs/architecture/cicd-pipeline.png)
+
+Deployment Flow:
+
+Developer → GitHub Repository → GitHub Actions → Amazon ECR → Amazon ECS
+
+GitHub Actions automatically builds Docker images for the frontend and backend, pushes them to Amazon ECR, and deploys updated containers to ECS.
+
+---
+
+## 3. AWS Infrastructure
+
+![AWS Infrastructure](docs/architecture/aws-infrastructure.png)
+
+Infrastructure Components:
+
+* AWS VPC
+* Public Subnet
+* Private Subnet
+* ECS Host EC2 Instance
+* Next.js Frontend Container
+* FastAPI Backend Container
+* PostgreSQL Container on Dedicated EC2
+* Amazon S3 Resume Storage
+* Security Groups
+* Internet Gateway
+
+---
+
+# Screenshots
+
+## Landing Page
+
+![Landing Page](docs/images/landing-page.png)
+
+---
+
+## Registration Page
+
+![Registration Page](docs/images/registration-page.png)
+
+---
+
+## Login Page
+
+![Login Page](docs/images/login-page.png)
+
+---
 
 ## Dashboard
 
-* Resume Management
-* Analysis History
-* 
+![Dashboard](docs/images/dashboard.png)
 
 ---
 
-# 🏗️ Architecture
+## My Resumes
 
-Frontend (Next.js)
-
-↓
-
-Nginx Reverse Proxy
-
-↓
-
-Backend API (FastAPI)
-
-↓
-
-PostgreSQL Database
-
-↓
-
-Amazon S3
+![My Resumes](docs/images/my-resumes.png)
 
 ---
 
-# 🛠️ Tech Stack
+## Resume Upload
+
+![Resume Upload](docs/images/resume-upload.png)
+
+---
+
+## Resume Details
+
+![Resume Details](docs/images/resume-detail.png)
+
+---
+
+## Total Analysis
+
+![Total Analysis](docs/images/total-analysis.png)
+
+---
+
+## ATS Analysis Demo
+
+![ATS Analysis Demo](docs/images/ats-analysis-demo.gif)
+
+---
+
+# Tech Stack
 
 ## Frontend
 
 * Next.js
-* React
 * TypeScript
 * Tailwind CSS
 * Axios
@@ -88,8 +163,7 @@ Amazon S3
 * Python
 * SQLAlchemy
 * JWT Authentication
-* Google OAuth Integration
-* SMTP Email Service
+* Pydantic
 
 ## Database
 
@@ -97,92 +171,24 @@ Amazon S3
 
 ## Cloud & DevOps
 
-* AWS ECS (EC2 Launch Type)
-* Amazon ECR
-* Amazon S3
-* EC2
-* Auto Scaling Group
-* IAM Roles
-* Security Groups
-* Nginx Reverse Proxy
-* GitHub Actions CI/CD
+* AWS ECS
+* AWS ECR
+* AWS EC2
+* AWS S3
+* Docker
+* GitHub Actions
+* Nginx
+
+## AI / NLP
+
+* Sentence Transformers
+* NLP-based Resume Analysis
+* Skill Matching Engine
+* ATS Scoring Logic
 
 ---
 
-# ☁️ AWS Infrastructure
-
-## Compute
-
-* ECS Cluster
-* ECS Services
-* ECS Task Definitions
-* EC2 Container Instances
-* Auto Scaling Group
-
-## Storage
-
-* Amazon S3 for Resume Storage
-
-## Database
-
-* PostgreSQL hosted on EC2
-
-## Networking
-
-* VPC
-* Public Subnet
-* Security Groups
-* Nginx Reverse Proxy
-
-## CI/CD
-
-GitHub Actions automatically:
-
-1. Builds Docker Images
-2. Pushes Images to Amazon ECR
-3. Deploys Updated Containers to ECS
-
----
-
-# 🔄 CI/CD Pipeline
-
-Developer Push
-
-↓
-
-GitHub Actions
-
-↓
-
-Build Docker Images
-
-↓
-
-Push to Amazon ECR
-
-↓
-
-Force ECS Deployment
-
-↓
-
-Updated Application
-
----
-
-# 🔐 Security Features
-
-* JWT Authentication
-* Password Hashing
-* Environment Variable Based Configuration
-* IAM Roles
-* Security Groups
-* Email OTP Verification
-* Protected API Routes
-
----
-
-# 📂 Project Structure
+# Project Structure
 
 ```text
 resumeguide/
@@ -190,181 +196,152 @@ resumeguide/
 ├── backend/
 │   ├── app/
 │   ├── requirements.txt
-│   ├── Dockerfile
-│   └── .env.example
+│   └── Dockerfile
 │
 ├── frontend/
-│   ├── src/
-│   ├── public/
-│   ├── package.json
-│   ├── Dockerfile
-│   └── .env.example
+│   ├── app/
+│   ├── components/
+│   └── Dockerfile
 │
-├── .github/
-│   └── workflows/
-│       └── deploy.yml
+├── docs/
+│   ├── architecture/
+│   └── images/
 │
+├── docker-compose.yml
+├── .env.example
 └── README.md
 ```
 
----
+# Local Setup
 
-# 🚀 Local Development Setup
+## Prerequisites
+
+* Python 3.11+
+* Node.js 20+
+* PostgreSQL
+* Docker
+* Docker Compose
+
+---
 
 ## Clone Repository
 
 ```bash
-git clone <repository-url>
-
+git clone https://github.com/aditya-121105/resumeguide.git
 cd resumeguide
 ```
 
----
-
-## Backend Setup
-
-```bash
-cd backend
-
-python -m venv .venv
-
-source .venv/bin/activate
-
-pip install -r requirements.txt
-```
-
-Create a local environment file:
+## Configure Environment Variables
 
 ```bash
 cp .env.example .env
 ```
 
-Update `.env` with your values.
-
-Start backend:
-
-```bash
-uvicorn app.main:app --reload
-```
+Update values inside `.env`.
 
 ---
 
-## Frontend Setup
+## Start Application
 
 ```bash
-cd frontend
-
-npm install
+docker compose up --build
 ```
 
-Create environment file:
+Application URLs:
 
-```bash
-cp .env.example .env.local
-```
-
-Start frontend:
-
-```bash
-npm run dev
-```
-
-Frontend runs on:
+Frontend:
 
 ```text
 http://localhost:3000
 ```
 
-Backend runs on:
+Backend:
 
 ```text
 http://localhost:8000
 ```
 
----
-
-# ⚙️ Required Environment Variables
-
-The repository includes:
+Swagger Documentation:
 
 ```text
-backend/.env.example
-frontend/.env.example
+http://localhost:8000/docs
 ```
 
-Configure:
+---
 
-* PostgreSQL Database
-* Google OAuth Credentials
-* SMTP Credentials
-* AWS Credentials
-* JWT Secret Key
-* S3 Configuration
+# Environment Variables
 
-before running the application.
+Create a `.env` file based on `.env.example`.
+
+Required configurations include:
+
+```env
+DATABASE_URL=
+SECRET_KEY=
+GOOGLE_CLIENT_ID=
+AWS_ACCESS_KEY_ID=
+AWS_SECRET_ACCESS_KEY=
+AWS_REGION=
+SMTP_EMAIL=
+SMTP_PASSWORD=
+
+```
+
+Do not commit actual secrets to GitHub.
 
 ---
 
-# 🧩 Deployment Challenges Solved
+# Deployment
 
-This project involved solving several real-world cloud deployment problems:
+ResumeGuide uses a containerized AWS deployment strategy.
 
-* ECS Task Networking Configuration
-* ECS EC2 Launch Type Management
-* Auto Scaling Group Integration
-* Nginx Reverse Proxy Configuration
-* SMTP Connectivity Troubleshooting
-* ECS Service Deployment Failures
-* Docker Image Management with ECR
-* CI/CD Automation using GitHub Actions
-* Dynamic Infrastructure Handling using Relative API Routing
+Deployment Flow:
 
-These experiences provided hands-on exposure to cloud-native deployment and production troubleshooting.
+1. Developer pushes code to GitHub.
+2. GitHub Actions builds frontend and backend Docker images.
+3. Images are pushed to Amazon ECR.
+4. Amazon ECS pulls the latest images.
+5. ECS updates running containers.
+6. PostgreSQL runs on a dedicated EC2 instance.
+7. Resume files are stored in Amazon S3.
 
 ---
 
-# 📸 Screenshots
+# Security
 
-Add screenshots here:
-
-* Landing Page
-* Login Page
-* Dashboard
-* Resume Upload
-* ATS Analysis Results
-* AWS Architecture Diagram
-
----
-
-# 🔮 Future Improvements
-
-* Custom Domain & HTTPS
-* AWS SES Production Email Service
-* Infrastructure as Code (Terraform/CDK)
-* Redis Caching
-* Multi-Region Deployment
+* JWT Authentication
+* Password Hashing
+* Protected API Endpoints
+* Environment Variable Based Secrets
+* S3-Based File Storage
+* Private Database Access
+* Security Group Restrictions
 
 ---
 
-# 👨‍💻 Author
+# Future Improvements
 
-Aditya Kumarkhaniya
-
-Software Engineering • Cloud • DevOps • AI/ML
-
-GitHub: [Add GitHub Link]
-
-LinkedIn: [Add LinkedIn Link]
+* Production-ready custom domain
+* HTTPS using ACM and Load Balancer
+* Production Google OAuth configuration
+* Advanced analytics dashboard
+* Background processing with queues
+* Multi-resume comparison
+* AI-powered resume rewriting
+* Real-time job matching
 
 ---
 
-# ⭐ Acknowledgements
+# Author
 
-This project was developed as part of a hands-on journey to learn:
+**Aditya Kumarkhaniya**
 
-* Full Stack Development
-* Cloud Computing
-* AWS Infrastructure
-* Containerization
-* CI/CD Automation
-* Production Deployment Practices
+GitHub:
+
+https://github.com/aditya-121105
+
+---
+
+# License
+
+This project is intended for educational, learning, and portfolio purposes.
